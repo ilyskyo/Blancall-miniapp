@@ -1,0 +1,462 @@
+/**
+ * Blancall 小程序全局样式（设计系统）
+ * 说明：颜色全部走 CSS 变量（由 core/theme/theme.ts 注入页面根节点），
+ * 深色模式为纯黑（#000），浅色为米白/纯白可切换。
+ */
+
+page {
+  /* 强调色上的前景色兜底（页面内统一用 var(--on-accent)） */
+  --on-accent: #ffffff;
+  background: var(--bg, #f7f5f1);
+  color: var(--text, #1c1c1e);
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei',
+    sans-serif;
+  font-size: 30rpx;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+view,
+text,
+input,
+textarea,
+scroll-view {
+  box-sizing: border-box;
+}
+
+/* ---------- 布局 ---------- */
+
+.page {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.page-body {
+  padding: 0 32rpx;
+}
+
+.page-body--tabbar {
+  padding-bottom: calc(180rpx + env(safe-area-inset-bottom));
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-1 {
+  flex: 1;
+  min-width: 0;
+}
+
+.gap-8 {
+  gap: 16rpx;
+}
+
+.gap-12 {
+  gap: 24rpx;
+}
+
+/* ---------- 文字 ---------- */
+
+.t-title {
+  font-size: 44rpx;
+  font-weight: 700;
+  letter-spacing: 0.5rpx;
+}
+
+.t-headline {
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+.t-body {
+  font-size: 30rpx;
+}
+
+.t-sub {
+  font-size: 26rpx;
+  color: var(--text-2);
+}
+
+.t-caption {
+  font-size: 23rpx;
+  color: var(--text-2);
+}
+
+.t-accent {
+  color: var(--accent);
+}
+
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---------- 玻璃卡片（GlassCard 降级实现：模糊 + 半透明 + 高光描边） ---------- */
+
+.glass-card {
+  position: relative;
+  border-radius: 32rpx;
+  background: var(--glass-bg);
+  border: 1rpx solid var(--glass-border);
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06), inset 0 1rpx 0 var(--glass-highlight);
+  backdrop-filter: blur(24rpx) saturate(1.4);
+  -webkit-backdrop-filter: blur(24rpx) saturate(1.4);
+  padding: 32rpx;
+}
+
+.glass-card--flat {
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.card {
+  border-radius: 28rpx;
+  background: var(--bg-elev);
+  border: 1rpx solid var(--border);
+  padding: 28rpx;
+}
+
+/* ---------- 按钮 ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 88rpx;
+  padding: 0 40rpx;
+  border-radius: 999rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  border: 1rpx solid var(--border);
+  background: var(--bg-elev);
+  color: var(--text);
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+}
+
+.btn--primary {
+  background: var(--accent);
+  border-color: transparent;
+  color: var(--on-accent, #ffffff);
+}
+
+.btn--ghost {
+  background: transparent;
+}
+
+.btn--danger {
+  color: var(--danger);
+}
+
+.btn--block {
+  width: 100%;
+}
+
+.btn--sm {
+  height: 64rpx;
+  padding: 0 28rpx;
+  font-size: 26rpx;
+}
+
+.btn[disabled] {
+  opacity: 0.45;
+}
+
+/* ---------- 开关（iOS 风格自绘，对应 GlassSwitch） ---------- */
+
+.switch {
+  width: 102rpx;
+  height: 62rpx;
+  border-radius: 999rpx;
+  background: #e5e5ea;
+  position: relative;
+  transition: background 0.22s ease;
+  flex: none;
+}
+
+.switch--on {
+  background: var(--accent);
+}
+
+.switch__knob {
+  position: absolute;
+  top: 4rpx;
+  left: 4rpx;
+  width: 54rpx;
+  height: 54rpx;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.18);
+  transition: transform 0.22s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.switch--on .switch__knob {
+  transform: translateX(40rpx);
+}
+
+/* ---------- 列表 ---------- */
+
+.list {
+  border-radius: 28rpx;
+  background: var(--bg-elev);
+  border: 1rpx solid var(--border);
+  overflow: hidden;
+}
+
+.list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 100rpx;
+  padding: 24rpx 28rpx;
+  border-bottom: 1rpx solid var(--border);
+}
+
+.list__item:last-child {
+  border-bottom: none;
+}
+
+.list__label {
+  font-size: 30rpx;
+}
+
+.list__value {
+  font-size: 26rpx;
+  color: var(--text-2);
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+/* ---------- 标签 / 徽标 ---------- */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 48rpx;
+  padding: 0 20rpx;
+  border-radius: 999rpx;
+  font-size: 23rpx;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.chip--muted {
+  background: rgba(127, 127, 127, 0.12);
+  color: var(--text-2);
+}
+
+.badge {
+  min-width: 36rpx;
+  height: 36rpx;
+  padding: 0 10rpx;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  color: #fff;
+  background: var(--danger);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- 空状态 ---------- */
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 40rpx;
+  gap: 24rpx;
+  color: var(--text-2);
+}
+
+/* ---------- 遮罩与模态（对应 GlassSheet：叠加模态遮罩阻断底层点击） ---------- */
+
+.mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.32);
+  z-index: 100;
+}
+
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 101;
+  border-radius: 36rpx 36rpx 0 0;
+  background: var(--bg);
+  border-top: 1rpx solid var(--border);
+  padding: 32rpx 32rpx calc(32rpx + env(safe-area-inset-bottom));
+  animation: sheet-up 0.26s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(40rpx);
+    opacity: 0.4;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.sheet__title {
+  font-size: 34rpx;
+  font-weight: 600;
+  margin-bottom: 24rpx;
+}
+
+/* ---------- 分隔线 ---------- */
+
+.divider {
+  height: 1rpx;
+  background: var(--border);
+  margin: 24rpx 0;
+}
+
+/* ---------- 练习相关 ---------- */
+
+.blank-slot {
+  display: inline-block;
+  min-width: 96rpx;
+  border-bottom: 2rpx solid var(--accent);
+  text-align: center;
+  margin: 0 6rpx;
+  padding: 0 8rpx;
+}
+
+.blank-slot--wrong {
+  border-bottom-color: var(--danger);
+  color: var(--danger);
+}
+
+.blank-slot--right {
+  border-bottom-color: var(--success);
+  color: var(--success);
+}
+
+.hint-ghost {
+  color: var(--text-2);
+  opacity: 0.65;
+  animation: hint-fade 5s ease forwards;
+}
+
+@keyframes hint-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.65;
+  }
+}
+
+/* 背诵遮挡块：完全不透明、圆角、与字形同高 */
+.mask-block {
+  display: inline-block;
+  border-radius: 8rpx;
+  padding: 0 2rpx;
+  cursor: pointer;
+}
+
+/* ---------- 锁定态（付费功能） ---------- */
+
+.locked {
+  position: relative;
+}
+
+.lock-badge {
+  position: absolute;
+  right: 20rpx;
+  top: 20rpx;
+  display: inline-flex;
+  align-items: center;
+  gap: 6rpx;
+  height: 44rpx;
+  padding: 0 16rpx;
+  border-radius: 999rpx;
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text-2);
+  font-size: 22rpx;
+}
+
+/* ---------- 限时免费活动：灰色小按键「点此限时免费使用」 ---------- */
+
+.campaign-free-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 52rpx;
+  padding: 0 22rpx;
+  border-radius: 999rpx;
+  background: rgba(120, 120, 128, 0.16);
+  color: var(--text-2);
+  font-size: 24rpx;
+  font-weight: 500;
+}
+
+.campaign-free-btn:active {
+  opacity: 0.7;
+}
+
+/* 通栏变体（用于弹层/表单，避免按钮过窄不好点） */
+.campaign-free-btn--block {
+  width: 100%;
+  height: 76rpx;
+  font-size: 28rpx;
+}
+
+/* 与说明文字同排时的紧凑变体 */
+.campaign-free-btn--inline {
+  margin-left: 12rpx;
+  vertical-align: middle;
+}
+
+.lock-badge--dark {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ---------- 进度条 ---------- */
+
+.progress {
+  height: 8rpx;
+  border-radius: 999rpx;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.progress__bar {
+  height: 100%;
+  border-radius: 999rpx;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}

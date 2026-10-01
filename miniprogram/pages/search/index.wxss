@@ -1,0 +1,72 @@
+/* 搜索页：输入栏 + 命中高亮 */
+
+.searchbar {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  height: 84rpx;
+  padding: 0 24rpx;
+  border-radius: 999rpx;
+  background: var(--bg-elev);
+  border: 1rpx solid var(--border);
+  margin-bottom: 20rpx;
+}
+
+.searchbar__icon {
+  font-size: 28rpx;
+}
+
+.searchbar__input {
+  flex: 1;
+  min-width: 0;
+  font-size: 30rpx;
+  color: var(--text);
+}
+
+.searchbar__ph {
+  color: var(--text-2);
+}
+
+.searchbar__clear {
+  flex: none;
+  padding: 0 8rpx;
+  color: var(--text-2);
+  font-size: 28rpx;
+}
+
+.count-line {
+  margin-bottom: 12rpx;
+}
+
+.result {
+  align-items: flex-start;
+}
+
+.result__main {
+  min-width: 0;
+}
+
+.result__title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.result__excerpt {
+  margin: 10rpx 0 14rpx;
+  line-height: 1.5;
+}
+
+.result__meta {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+/* 关键词高亮（不使用 innerHTML） */
+.hl {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 6rpx;
+  padding: 0 4rpx;
+}

@@ -1,0 +1,208 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="{{articleTitle}}" center bind:righttap="onSwitchMode" />
+
+  <!-- 顶部状态条：模式 / 进度 / 字号 -->
+  <view class="bar">
+    <view class="bar__item chip" bindtap="onOpenModeSheet">{{modeLabel}}</view>
+    <view class="bar__item flex-1">
+      <view class="progress"><view class="progress__bar" style="width:{{progressPercent}}%"></view></view>
+      <view class="t-caption">{{answered}} / {{total}}</view>
+    </view>
+    <view class="bar__item chip" bindtap="onToggleFont">A{{fontScaleLabel}}</view>
+  </view>
+
+  <!-- 设置面板 -->
+  <block wx:if="{{phase === 'setup'}}">
+    <view class="mask" catchtap="noop"></view>
+    <view class="sheet">
+      <view class="sheet__title">选择练习模式</view>
+      <view class="mode-grid">
+        <view
+          wx:for="{{modeOptions}}"
+          wx:key="value"
+          class="mode-cell {{option.mode === item.value ? 'mode-cell--active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onPickMode"
+        >
+          <view class="mode-cell__icon">{{item.icon}}</view>
+          <view class="t-body">{{item.label}}</view>
+          <view class="t-caption">{{item.desc}}</view>
+        </view>
+      </view>
+
+      <view class="divider"></view>
+
+      <view class="row-between option-row">
+        <view class="t-body">段落范围</view>
+        <view class="row gap-8">
+          <view
+            wx:for="{{sectionModes}}"
+            wx:key="value"
+            class="chip {{option.sectionMode === item.value ? '' : 'chip--muted'}}"
+            data-value="{{item.value}}"
+            bindtap="onPickSectionMode"
+          >{{item.label}}</view>
+        </view>
+      </view>
+
+      <view wx:if="{{option.sectionMode === 'SELECTED'}}" class="section-picker">
+        <view
+          wx:for="{{sections}}"
+          wx:key="index"
+          class="section-item {{item.selected ? 'section-item--selected' : ''}}"
+          data-index="{{item.index}}"
+          bindtap="onToggleSection"
+        >
+          <view class="t-sub ellipsis">{{item.label}}</view>
+        </view>
+        <view class="t-caption">已选 {{selectedSectionCount}} 段（至少 1 段）</view>
+      </view>
+
+      <view class="row-between option-row">
+        <view class="t-body">挖空策略</view>
+        <view class="row gap-8">
+          <view
+            wx:for="{{strategies}}"
+            wx:key="value"
+            class="chip {{option.strategy === item.value ? '' : 'chip--muted'}}"
+            data-value="{{item.value}}"
+            bindtap="onPickStrategy"
+          >{{item.label}}</view>
+        </view>
+      </view>
+
+      <view class="row-between option-row">
+        <view class="t-body">古文模式（虚词降权）</view>
+        <glass-switch checked="{{option.classical}}" bind:change="onToggleClassical" />
+      </view>
+
+      <view wx:if="{{aiAvailable}}" class="row-between option-row">
+        <view class="t-body">使用 AI 挖空</view>
+        <glass-switch checked="{{option.useAi}}" bind:change="onToggleAi" />
+      </view>
+      <view wx:if="{{aiAvailable}}" class="t-caption">AI 挖空未上线，生成将自动回退本地算法</view>
+
+      <view class="sheet-actions">
+        <view class="btn btn--ghost flex-1" bindtap="onCancelSetup">取消</view>
+        <view class="btn btn--primary flex-1" bindtap="onConfirmSetup">开始练习</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- AI 采集（难度 / 策略 / 补充要求） -->
+  <block wx:if="{{phase === 'collect'}}">
+    <view class="mask" catchtap="noop"></view>
+    <view class="sheet">
+      <view class="sheet__title">AI 挖空设置</view>
+      <view class="row-between option-row">
+        <view class="t-body">难度</view>
+        <view class="row gap-8">
+          <view
+            wx:for="{{levels}}"
+            wx:key="value"
+            class="chip {{collect.level === item.value ? '' : 'chip--muted'}}"
+            data-value="{{item.value}}"
+            bindtap="onPickLevel"
+          >{{item.label}}</view>
+        </view>
+      </view>
+      <view class="row-between option-row">
+        <view class="t-body">策略</view>
+        <view class="row gap-8">
+          <view
+            wx:for="{{strategies}}"
+            wx:key="value"
+            class="chip {{collect.strategy === item.value ? '' : 'chip--muted'}}"
+            data-value="{{item.value}}"
+            bindtap="onPickCollectStrategy"
+          >{{item.label}}</view>
+        </view>
+      </view>
+      <view class="option-row">
+        <view class="t-body">补充要求（可选）</view>
+        <textarea class="extra-input" value="{{collect.extra}}" maxlength="200" placeholder="例如：重点考察通假字" bindinput="onExtraInput" />
+      </view>
+      <view class="t-caption">AI 仅返回挖空坐标，内容由本地原文切片，不会改写原文</view>
+      <view wx:if="{{aiLongText}}" class="t-caption">全文较长：AI 只处理前 {{aiMaxChars}} 字，其余部分由本地算法自动补齐挖空</view>
+      <view class="sheet-actions">
+        <view class="btn btn--ghost flex-1" bindtap="onCancelCollect">返回</view>
+        <view class="btn btn--primary flex-1" bindtap="onConfirmCollect">生成</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- AI 生成中 -->
+  <block wx:if="{{phase === 'ai'}}">
+    <view class="ai-loading">
+      <view class="ai-loading__spinner"></view>
+      <view class="t-headline">AI 正在生成挖空…</view>
+      <view class="t-sub">预计 5–30 秒；超时或失败会自动回退本地算法</view>
+      <view class="btn btn--ghost btn--sm" bindtap="onFallbackLocal">等太久？用本地算法生成</view>
+    </view>
+  </block>
+
+  <!-- 作答区 -->
+  <block wx:if="{{phase === 'answering'}}">
+    <view class="content" style="font-size:{{fontPx}}rpx; line-height:{{lineHeight}}" bindtouchstart="onTouchStart" bindtouchmove="onTouchMove">
+      <!-- 句子 / 字词模式 -->
+      <block wx:if="{{mode !== 'REVERSE'}}">
+        <view class="text-flow">
+          <block wx:for="{{segments}}" wx:key="index">
+            <text class="seg-text">{{item.text}}</text>
+            <block wx:if="{{item.blank}}">
+              <input
+                class="blank-input {{item.blank.state === 'correct' ? 'blank-input--right' : ''}} {{item.blank.state === 'wrong' ? 'blank-input--wrong' : ''}}"
+                style="width:{{item.blank.width}}rpx"
+                type="text"
+                value="{{item.blank.value}}"
+                data-index="{{item.blank.index}}"
+                confirm-type="next"
+                bindinput="onBlankInput"
+                bindfocus="onBlankFocus"
+                bindblur="onBlankBlur"
+              />
+              <text wx:if="{{item.blank.hint}}" class="hint-ghost">{{item.blank.hint}}</text>
+              <text wx:if="{{item.blank.state === 'wrong'}}" class="answer-tip">{{item.blank.answer}}</text>
+            </block>
+          </block>
+        </view>
+      </block>
+
+      <!-- 反向默写 -->
+      <block wx:else>
+        <view class="clue-list">
+          <view class="t-caption">打乱后的分句线索（含挖空），请按原文顺序默写全文：</view>
+          <view wx:for="{{clues}}" wx:key="displayOrder" class="clue-item">
+            <text class="clue-item__index">{{item.displayOrder + 1}}</text>
+            <text class="flex-1">{{item.text}}</text>
+            <text class="clue-item__copy" data-text="{{item.text}}" bindtap="onCopyClue">复制</text>
+          </view>
+        </view>
+        <textarea
+          class="dictation-input"
+          value="{{dictationInput}}"
+          placeholder="在此默写全文…"
+          maxlength="-1"
+          bindinput="onDictationInput"
+          bindfocus="onDictationFocus"
+        />
+      </block>
+    </view>
+
+    <view class="footer">
+      <view class="t-caption" wx:if="{{showHintHint}}">提示已开启：10 秒无输入会淡显下一个字</view>
+      <view class="footer__actions">
+        <view wx:if="{{!allAnswered}}" class="btn btn--ghost flex-1" bindtap="onPartialSubmit">批改已填写</view>
+        <view class="btn btn--primary flex-1" bindtap="onGrade">{{allAnswered ? '提交批改' : '提交'}}</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 批改结果提示 -->
+  <view wx:if="{{graded}}" class="graded-bar">
+    <text>正确 {{correctCount}} / {{total}}</text>
+    <text class="graded-bar__action" bindtap="onGoResult">查看结果</text>
+  </view>
+</view>
+
+<privacy-popup />

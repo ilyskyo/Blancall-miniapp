@@ -1,0 +1,139 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="{{brandTitle}}" showBack="{{false}}" />
+
+  <!-- 品牌栏：默认收起，从顶部下拉或点击展开 -->
+  <view
+    class="brand {{brandExpanded ? 'brand--open' : ''}}"
+    bindtouchstart="onBrandTouchStart"
+    bindtouchmove="onBrandTouchMove"
+    bindtap="onToggleBrand"
+  >
+    <view class="brand__text flex-1">
+      <view class="t-headline ellipsis">{{brandTitle}}</view>
+      <view wx:if="{{brandExpanded}}" class="t-sub ellipsis">{{brandSubtitle}}</view>
+    </view>
+    <view class="brand__side">
+      <view class="chip chip--muted" catchtap="onOpenSettings">设置</view>
+      <view class="brand__chevron">{{brandExpanded ? '︿' : '﹀'}}</view>
+    </view>
+  </view>
+
+  <!-- 搜索栏（常显） -->
+  <view class="page-body">
+    <view class="searchbar" bindtap="onOpenSearch">
+      <view class="searchbar__icon">🔍</view>
+      <view class="searchbar__ph t-sub ellipsis">搜索标题、正文或日期</view>
+      <view class="searchbar__add btn btn--primary btn--sm" catchtap="onOpenImport">＋ 添加</view>
+    </view>
+  </view>
+
+  <view class="page-body page-body--tabbar">
+    <!-- 空状态：无文章时显示导入入口（位置偏下） -->
+    <view wx:if="{{articleCount === 0}}" class="empty-wrap">
+      <empty-state
+        icon="📥"
+        text="还没有文章，先导入一篇开始背诵"
+        actionText="导入第一篇文章"
+        bind:action="onOpenImport"
+      />
+    </view>
+
+    <view wx:else class="cards">
+      <view
+        wx:for="{{cards}}"
+        wx:key="id"
+        class="home-card glass-card {{item.wide ? 'home-card--wide' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="onTapCard"
+        bindlongpress="onLongPressCard"
+      >
+        <view class="home-card__head">
+          <text class="t-body home-card__title ellipsis flex-1">{{item.title}}</text>
+          <text wx:if="{{item.pinned}}" class="home-card__pin">📌</text>
+        </view>
+        <view wx:if="{{item.showTypeLabel}}" class="t-caption">{{item.typeLabel}}</view>
+
+        <!-- 列表型：即将复习 / 继续练习 / 最近文章 -->
+        <block wx:if="{{item.type === 'DUE' || item.type === 'CONTINUE' || item.type === 'RECENT'}}">
+          <view wx:if="{{item.rows.length === 0}}" class="t-caption home-card__empty">{{item.emptyText}}</view>
+          <view
+            wx:for="{{item.rows}}"
+            wx:for-item="row"
+            wx:key="key"
+            class="home-row"
+            data-article="{{row.articleUuid}}"
+            data-resume="{{item.type === 'CONTINUE' ? 1 : 0}}"
+            catchtap="onTapRow"
+          >
+            <view class="flex-1 home-row__main">
+              <view class="t-body ellipsis">{{row.title}}</view>
+              <view class="t-caption ellipsis">{{row.desc}}</view>
+            </view>
+            <text wx:if="{{row.badge}}" class="chip chip--muted">{{row.badge}}</text>
+          </view>
+        </block>
+
+        <!-- 每日一句 -->
+        <block wx:elif="{{item.type === 'SENTENCE'}}">
+          <view class="sentence__text">{{item.sentence}}</view>
+          <view class="t-caption sentence__src">{{item.sentenceSource}}</view>
+        </block>
+
+        <!-- 导入入口 -->
+        <block wx:elif="{{item.type === 'ADD_ARTICLE'}}">
+          <view class="add-card">
+            <view class="add-card__icon">＋</view>
+            <view class="t-sub">{{item.subtitle}}</view>
+          </view>
+        </block>
+
+        <!-- 单篇文章 / 自定义挖空 / 遮挡配置 -->
+        <block wx:elif="{{item.type === 'ARTICLE' || item.type === 'CUSTOM_CLOZE' || item.type === 'CUSTOM_MASK'}}">
+          <view class="t-caption home-card__empty">{{item.emptyText || item.subtitle}}</view>
+          <view class="t-caption home-card__foot">{{item.footer}}</view>
+        </block>
+
+        <!-- 统计类卡片 -->
+        <block wx:else>
+          <view wx:if="{{item.emptyText}}" class="t-caption home-card__empty">{{item.emptyText}}</view>
+          <view wx:else class="metrics">
+            <view wx:for="{{item.metrics}}" wx:for-item="m" wx:key="label" class="metric">
+              <view class="metric__value">{{m.value}}</view>
+              <view class="t-caption">{{m.label}}</view>
+            </view>
+          </view>
+          <view wx:if="{{item.footer}}" class="t-caption home-card__foot">{{item.footer}}</view>
+        </block>
+      </view>
+    </view>
+
+    <!-- 添加卡片入口 -->
+    <view wx:if="{{articleCount > 0}}" class="dock">
+      <view class="btn btn--sm" bindtap="onOpenSheet">＋ 添加卡片</view>
+      <view class="t-caption dock__hint">长按卡片可固定或删除</view>
+    </view>
+  </view>
+
+  <!-- 添加卡片面板 -->
+  <block wx:if="{{sheetVisible}}">
+    <view class="mask" catchtap="onCloseSheet"></view>
+    <view class="sheet">
+      <view class="sheet__title">添加卡片</view>
+      <view class="t-caption">已在首页的类型不再显示</view>
+      <view wx:if="{{addable.length === 0}}" class="t-caption sheet__empty">全部卡片类型都已添加</view>
+      <view wx:else class="type-grid">
+        <view
+          wx:for="{{addable}}"
+          wx:key="type"
+          class="type-cell"
+          data-type="{{item.type}}"
+          bindtap="onAddCard"
+        >
+          <view class="type-cell__icon">{{item.icon}}</view>
+          <view class="t-body">{{item.label}}</view>
+        </view>
+      </view>
+      <view class="btn btn--ghost btn--block sheet__close" bindtap="onCloseSheet">关闭</view>
+    </view>
+  </block>
+</view>

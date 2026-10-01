@@ -1,0 +1,77 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="素材库" showBack="{{false}}" />
+
+  <view class="page-body page-body--tabbar">
+    <!-- 页内标题（目录 / 正文） -->
+    <view wx:if="{{mode !== 'list'}}" class="subhead">
+      <view class="subhead__back" bindtap="onBackInPage">‹</view>
+      <text class="subhead__title ellipsis">{{mode === 'index' ? '高考必背 60 篇' : currentTitle}}</text>
+      <view wx:if="{{offline}}" class="chip chip--muted">当前离线</view>
+      <view wx:else class="subhead__spacer"></view>
+    </view>
+
+    <!-- ============ 库列表 ============ -->
+    <block wx:if="{{mode === 'list'}}">
+      <view wx:if="{{!anyEnabled}}" class="card hint-card">
+        <text class="t-body">尚未启用任何素材库</text>
+        <text class="t-sub">前往设置开启「内置素材库」后即可浏览篇目</text>
+        <view class="btn btn--primary btn--sm" bindtap="onGoSettings">去设置开启</view>
+      </view>
+
+      <view wx:for="{{cards}}" wx:key="key" class="card lib-card">
+        <view class="row-between">
+          <view class="flex-1">
+            <text class="t-headline">{{item.name}}</text>
+            <view class="t-sub lib-desc">{{item.subtitle}} · {{item.note}}</view>
+          </view>
+          <view class="switch {{item.enabled ? 'switch--on' : ''}}" data-key="{{item.key}}" catchtap="onToggle">
+            <view class="switch__knob"></view>
+          </view>
+        </view>
+        <view class="lib-actions">
+          <view class="btn btn--sm {{item.enabled ? 'btn--primary' : ''}}" bindtap="onOpenLibrary">浏览篇目</view>
+        </view>
+      </view>
+    </block>
+
+    <!-- ============ 目录 ============ -->
+    <block wx:elif="{{mode === 'index'}}">
+      <view wx:if="{{indexItems.length > 0}}" class="list">
+        <view
+          wx:for="{{indexItems}}"
+          wx:key="no"
+          class="list__item"
+          data-no="{{item.no}}"
+          bindtap="onOpenText"
+        >
+          <view class="row lib-item-left">
+            <text class="lib-no">{{item.no}}</text>
+            <text class="list__label">{{item.title}}</text>
+          </view>
+          <text class="chevron">›</text>
+        </view>
+      </view>
+      <empty-state wx:else text="目录为空或加载失败" actionText="重试" bind:action="onOpenLibrary" />
+    </block>
+
+    <!-- ============ 正文 ============ -->
+    <block wx:else>
+      <view class="card lib-text">
+        <text class="lib-text__body">{{current.text}}</text>
+      </view>
+      <view class="lib-import">
+        <view class="btn btn--primary btn--block" bindtap="onImport">导入到背诵</view>
+      </view>
+    </block>
+
+    <view wx:if="{{loading}}" class="loading t-sub">加载中…</view>
+  </view>
+
+  <!-- ============ 免责声明 ============ -->
+  <view wx:if="{{disclaimerVisible}}" class="mask"></view>
+  <view wx:if="{{disclaimerVisible}}" class="dialog card">
+    <text class="t-headline">素材库免责声明</text>
+    <text class="t-sub dialog__body">{{disclaimerText}}</text>
+    <view class="btn btn--primary btn--block" bindtap="onConfirmDisclaimer">我已阅读并同意</view>
+  </view>
+</view>

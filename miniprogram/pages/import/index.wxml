@@ -1,0 +1,90 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="导入文章" />
+
+  <view class="page-body">
+    <!-- 来源切换 -->
+    <view class="tabs">
+      <view
+        wx:for="{{tabs}}"
+        wx:key="value"
+        class="tab {{source === item.value ? 'tab--on' : ''}}"
+        data-value="{{item.value}}"
+        bindtap="onTab"
+      >{{item.label}}</view>
+    </view>
+
+    <!-- 聊天记录文件 -->
+    <view wx:if="{{source === 'file'}}" class="picker" bindtap="onPickFile">
+      <view class="picker__icon">📎</view>
+      <view class="flex-1 picker__text">
+        <view class="t-body ellipsis">{{sourceName || '从聊天记录选择文件'}}</view>
+        <view class="t-caption">TXT/MD 本地解析；PDF/DOC/DOCX/EPUB/RTF/HTML 需登录后云端解析</view>
+      </view>
+      <view class="t-accent picker__cta">选择 ›</view>
+    </view>
+
+    <!-- 素材库示例 -->
+    <view wx:if="{{source === 'sample'}}" class="picker" bindtap="onPickFile">
+      <view class="picker__icon">📚</view>
+      <view class="flex-1 picker__text">
+        <view class="t-body ellipsis">{{sampleTitle || '示例文章'}}</view>
+        <view class="t-caption">来自内置素材库，可直接保存到「我的文章」</view>
+      </view>
+    </view>
+
+    <!-- 粘贴文本 -->
+    <view wx:if="{{source === 'paste'}}" class="paste">
+      <textarea
+        class="paste__area"
+        value="{{text}}"
+        bindinput="onTextInput"
+        placeholder="在此粘贴文章正文…"
+        placeholder-class="paste__ph"
+        maxlength="-1"
+        auto-height="{{false}}"
+      />
+    </view>
+
+    <view class="t-caption stat-line">字数 {{wordCount}}（不含空白字符）</view>
+
+    <!-- 标题 / 作者 -->
+    <view class="field">
+      <view class="t-caption">标题</view>
+      <input class="field__input" value="{{title}}" bindinput="onTitleInput" placeholder="留空将取正文首行" />
+    </view>
+    <view class="field">
+      <view class="t-caption">作者</view>
+      <input class="field__input" value="{{author}}" bindinput="onAuthorInput" placeholder="可选" />
+    </view>
+
+    <!-- 自动首行缩进（仅纯文本） -->
+    <view class="list indent-row">
+      <view class="list__item">
+        <view class="flex-1">
+          <view class="list__label">自动首行缩进</view>
+          <view class="t-caption">对 TXT/粘贴文本按空行分段补两个全角空格</view>
+        </view>
+        <glass-switch checked="{{autoIndent}}" bind:change="onToggleIndent" />
+      </view>
+    </view>
+
+    <!-- 预览 -->
+    <view class="section-title t-headline">预览</view>
+    <view class="preview glass-card">
+      <text class="preview__text">{{preview}}</text>
+    </view>
+
+    <view class="btn btn--primary btn--block save-btn {{cloudBusy ? 'is-busy' : ''}}" bindtap="save">
+      {{cloudBusy ? '处理中…' : '保存到我的文章'}}
+    </view>
+  </view>
+
+  <lock-mask
+    visible="{{lockVisible}}"
+    feature="{{lockFeature}}"
+    bind:close="onCloseLock"
+    bind:unlock="onUnlockLock"
+  />
+</view>
+
+<privacy-popup />

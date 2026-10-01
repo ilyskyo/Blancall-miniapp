@@ -1,0 +1,31 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="自定义挖空" rightText="{{rightText}}" bind:righttap="onNew" />
+
+  <view class="page-body">
+    <view class="card head-card">
+      <view class="t-headline ellipsis">{{articleTitle}}</view>
+      <view class="t-sub">共 {{configs.length}} 套配置</view>
+    </view>
+
+
+    <view wx:if="{{configs.length > 0}}" class="list">
+      <view wx:for="{{configs}}" wx:key="uuid" class="cfg-row">
+        <view class="flex-1" data-uuid="{{item.uuid}}" bindtap="onSelect">
+          <view class="row-between">
+            <view class="list__label ellipsis">{{item.name}}</view>
+            <view class="{{item.activeCls}}">{{item.activeLabel}}</view>
+          </view>
+          <view class="t-caption">{{item.modeLabel}} · {{item.blankCount}} 空 · {{item.createdText}}</view>
+        </view>
+        <view class="cfg-actions">
+          <view class="icon-btn" data-uuid="{{item.uuid}}" bindtap="onEdit">编辑</view>
+          <view class="icon-btn" data-uuid="{{item.uuid}}" bindtap="onPractice">练习</view>
+          <view class="icon-btn icon-btn--danger" data-uuid="{{item.uuid}}" bindtap="onDelete">删除</view>
+        </view>
+      </view>
+    </view>
+
+    <empty-state wx:if="{{configs.length === 0}}" icon="✏️" text="还没有自定义挖空配置" actionText="{{rightText}}" bind:action="onNew" />
+  </view>
+
+</view>

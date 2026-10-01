@@ -1,0 +1,129 @@
+﻿/* 导入页：来源切换 / 粘贴框 / 表单 / 预览 */
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 6rpx;
+  border-radius: 999rpx;
+  background: var(--bg-elev);
+  border: 1rpx solid var(--border);
+  margin-bottom: 28rpx;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  height: 68rpx;
+  line-height: 68rpx;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  color: var(--text-2);
+}
+
+.tab--on {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+/* ---------- 文件 / 示例选择 ---------- */
+
+.picker {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 26rpx 28rpx;
+  border-radius: 28rpx;
+  background: var(--bg-elev);
+  border: 1rpx dashed var(--border);
+  margin-bottom: 24rpx;
+}
+
+.picker__icon {
+  font-size: 44rpx;
+  line-height: 1;
+}
+
+.picker__text {
+  min-width: 0;
+}
+
+.picker__cta {
+  flex: none;
+  font-size: 26rpx;
+}
+
+/* ---------- 粘贴 ---------- */
+
+.paste {
+  margin-bottom: 16rpx;
+}
+
+.paste__area {
+  width: 100%;
+  height: 420rpx;
+  padding: 26rpx;
+  border-radius: 28rpx;
+  background: var(--bg-elev);
+  border: 1rpx solid var(--border);
+  color: var(--text);
+  font-size: 30rpx;
+  line-height: 1.6;
+}
+
+.paste__ph {
+  color: var(--text-2);
+}
+
+.stat-line {
+  margin-bottom: 24rpx;
+}
+
+/* ---------- 表单 ---------- */
+
+.field {
+  margin-bottom: 24rpx;
+}
+
+.field__input {
+  margin-top: 10rpx;
+  height: 84rpx;
+  padding: 0 24rpx;
+  border-radius: 20rpx;
+  background: var(--bg-elev);
+  border: 1rpx solid var(--border);
+  color: var(--text);
+  font-size: 30rpx;
+}
+
+.indent-row {
+  margin-bottom: 28rpx;
+}
+
+/* ---------- 预览 ---------- */
+
+.section-title {
+  margin: 8rpx 0 16rpx;
+}
+
+.preview {
+  min-height: 200rpx;
+  margin-bottom: 32rpx;
+}
+
+.preview__text {
+  font-size: 28rpx;
+  line-height: 1.7;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.save-btn {
+  margin-bottom: 40rpx;
+}
+
+.is-busy {
+  opacity: 0.6;
+}

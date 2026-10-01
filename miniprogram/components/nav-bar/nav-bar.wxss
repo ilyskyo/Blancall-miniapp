@@ -1,0 +1,58 @@
+.nav {
+  position: relative;
+  z-index: 20;
+}
+
+.nav--fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+.nav__inner {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 20rpx;
+}
+
+.nav__left {
+  width: 72rpx;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav__back-icon {
+  width: 20rpx;
+  height: 20rpx;
+  border-left: 4rpx solid var(--text);
+  border-bottom: 4rpx solid var(--text);
+  transform: rotate(45deg);
+  margin-left: 6rpx;
+}
+
+.nav__title {
+  flex: 1;
+  font-size: 34rpx;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.nav__title--center {
+  text-align: center;
+}
+
+.nav__right {
+  min-width: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16rpx;
+}
+
+.nav__right-text {
+  font-size: 30rpx;
+}

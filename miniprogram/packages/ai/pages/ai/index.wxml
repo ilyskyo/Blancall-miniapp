@@ -1,0 +1,58 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="AI 对话" rightText="历史" bind:righttap="onHistory" />
+
+  <view class="page-body">
+    <view class="card ctx-card" bindtap="onOpenPicker">
+      <view class="row-between">
+        <view class="flex-1 ellipsis t-body">上下文：{{ctxText}}</view>
+        <view class="t-caption">选择文章 ▾</view>
+      </view>
+      <view class="t-caption">最多可选 3 篇文章，AI 将据此回答</view>
+    </view>
+
+    <view wx:if="{{!aiAllowed}}" class="card lock-banner">
+      <view class="t-body">{{gateReason}}</view>
+    </view>
+
+    <scroll-view class="msgs" scroll-y scroll-into-view="{{scrollInto}}" scroll-with-animation>
+      <view class="msg" wx:for="{{messages}}" wx:key="id" id="{{item.anchor}}">
+        <view class="{{item.bubbleCls}}">{{item.text}}</view>
+        <view wx:if="{{item.showAiLabel}}" class="t-caption ai-label">本内容由 AI 生成，仅供参考</view>
+        <view wx:if="{{item.error}}" class="resend" data-index="{{item.index}}" bindtap="onResend">发送失败，点击重发</view>
+      </view>
+      <view wx:if="{{messages.length === 0}}" class="empty">选择一个或多个文章作为上下文，开始提问</view>
+    </scroll-view>
+  </view>
+
+  <view class="input-bar">
+    <input
+      class="input-bar__field"
+      value="{{inputValue}}"
+      placeholder="输入问题…"
+      confirm-type="send"
+      disabled="{{sending}}"
+      bindinput="onInput"
+      bindconfirm="onSend"
+    />
+    <view class="{{sendCls}}" bindtap="onSend">{{sendText}}</view>
+  </view>
+
+  <!-- 上下文多选 -->
+  <view wx:if="{{showPicker}}" class="mask" bindtap="onClosePicker"></view>
+  <view wx:if="{{showPicker}}" class="sheet">
+    <view class="sheet__title">选择上下文文章（最多 3 篇）</view>
+    <scroll-view class="picker" scroll-y>
+      <view wx:for="{{articleOptions}}" wx:key="uuid" class="picker-row" data-uuid="{{item.uuid}}" bindtap="onToggleArticle">
+        <view class="picker-check {{item.cls}}">{{item.mark}}</view>
+        <view class="flex-1 ellipsis">{{item.title}}</view>
+      </view>
+      <view wx:if="{{articleOptions.length === 0}}" class="empty">还没有文章</view>
+    </scroll-view>
+    <view class="sheet-actions">
+      <view class="btn btn--ghost flex-1" bindtap="onClosePicker">取消</view>
+      <view class="btn btn--primary flex-1" bindtap="onConfirmPicker">确定</view>
+    </view>
+  </view>
+
+  <lock-mask visible="{{lockVisible}}" aiMode="{{true}}" bind:close="onLockClose" bind:unlock="onLockClose" />
+</view>

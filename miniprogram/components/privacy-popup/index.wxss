@@ -1,0 +1,93 @@
+/* 隐私授权弹窗：纯色 + 轻毛玻璃，无 emoji、无渐变 */
+.pp-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48rpx;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.pp-card {
+  width: 100%;
+  max-width: 560rpx;
+  box-sizing: border-box;
+  padding: 40rpx 36rpx 28rpx;
+  border-radius: 28rpx;
+  background: #ffffff;
+  box-shadow: 0 24rpx 64rpx rgba(0, 0, 0, 0.18);
+}
+
+.pp-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #1c1c1e;
+  text-align: center;
+  margin-bottom: 24rpx;
+}
+
+.pp-body {
+  font-size: 28rpx;
+  line-height: 1.7;
+  color: #3a3a3c;
+  margin-bottom: 36rpx;
+}
+
+.pp-link {
+  color: #0a84ff;
+}
+
+.pp-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 88rpx;
+  border-radius: 20rpx;
+  font-size: 30rpx;
+  margin: 0;
+  padding: 0;
+}
+
+.pp-btn::after {
+  border: none;
+}
+
+.pp-btn--primary {
+  background: #1c1c1e;
+  color: #ffffff;
+  font-weight: 600;
+  margin-bottom: 16rpx;
+}
+
+.pp-btn--ghost {
+  background: #f2f2f7;
+  color: #1c1c1e;
+}
+
+/* 深色模式 */
+@media (prefers-color-scheme: dark) {
+  .pp-card {
+    background: #1c1c1e;
+    box-shadow: 0 24rpx 64rpx rgba(0, 0, 0, 0.5);
+  }
+
+  .pp-title {
+    color: #f2f2f7;
+  }
+
+  .pp-body {
+    color: #c7c7cc;
+  }
+
+  .pp-btn--primary {
+    background: #f2f2f7;
+    color: #1c1c1e;
+  }
+
+  .pp-btn--ghost {
+    background: #2c2c2e;
+    color: #f2f2f7;
+  }
+}

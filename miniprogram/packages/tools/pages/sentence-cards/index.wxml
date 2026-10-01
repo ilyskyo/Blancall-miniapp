@@ -1,0 +1,34 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="每日句卡" />
+
+  <view class="page-body">
+    <block wx:if="{{hasCard}}">
+      <view class="glass-card card-main">
+        <view class="t-caption">{{dateText}}</view>
+        <view class="quote">{{text}}</view>
+        <view class="t-sub source">—— {{title}}</view>
+      </view>
+
+      <view class="actions">
+        <view class="btn btn--ghost flex-1" bindtap="onCopy">复制</view>
+        <view class="btn btn--ghost flex-1" bindtap="onChange">换一句</view>
+      </view>
+      <view class="actions">
+        <view class="btn btn--ghost flex-1" bindtap="onShareImage">生成分享图</view>
+        <view class="btn btn--primary flex-1" bindtap="onGoPractice">去练习</view>
+      </view>
+    </block>
+
+    <empty-state
+      wx:else
+      icon="📜"
+      text="{{emptyText}}"
+      actionText="去导入文章"
+      bind:action="onGoImport"
+    />
+  </view>
+
+  <canvas type="2d" id="shareCanvas" class="share-canvas"></canvas>
+</view>
+
+<privacy-popup />

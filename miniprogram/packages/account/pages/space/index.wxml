@@ -1,0 +1,42 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="我的空间" />
+
+  <view class="page-body space-body">
+    <block wx:if="{{!loggedIn}}">
+      <empty-state icon="🔐" text="登录后可使用云端空间" actionText="去登录" bind:action="onGoLogin" />
+    </block>
+
+    <block wx:else>
+      <!-- 用量条 -->
+      <view class="glass-card usage-card">
+        <view class="usage-head">
+          <view>
+            <view class="usage-used">{{usedText}}<text class="usage-total"> / {{totalText}}</text></view>
+            <view class="t-caption">已使用云空间</view>
+          </view>
+          <view class="usage-percent">{{usedPercent}}%</view>
+        </view>
+        <view class="progress usage-progress">
+          <view class="progress__bar" style="width:{{usedPercent}}%"></view>
+        </view>
+        <view class="usage-rows">
+          <view class="usage-row"><text class="t-sub">基础配额</text><text class="usage-value">{{baseText}}</text></view>
+          <view class="usage-row"><text class="t-sub">总配额</text><text class="usage-value">{{totalText}}</text></view>
+        </view>
+      </view>
+
+      <!-- 明细 -->
+      <view class="group__title">用量明细</view>
+      <view wx:if="{{items.length === 0}}" class="empty">
+        <view class="empty__icon">🗂️</view>
+        <view class="t-sub">暂无云端文件</view>
+      </view>
+      <view wx:else class="list">
+        <view wx:for="{{items}}" wx:key="typeLabel" class="list__item">
+          <text class="list__label">{{item.typeLabel}}</text>
+          <text class="list__value">{{item.sizeText}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

@@ -1,0 +1,41 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="使用引导" showBack="{{false}}">
+    <view slot="right" class="skip" bindtap="onSkip">跳过</view>
+  </nav-bar>
+
+  <view class="page-body onboard">
+    <view class="steps">
+      <view
+        wx:for="{{steps}}"
+        wx:key="title"
+        class="step glass-card {{index === current ? 'step--active' : ''}}"
+      >
+        <view class="step__icon">{{item.icon}}</view>
+        <view class="t-headline step__title">{{item.title}}</view>
+        <view class="t-body step__desc">{{item.desc}}</view>
+        <view wx:if="{{index === current}}" class="step__points">
+          <view wx:for="{{item.points}}" wx:for-item="p" wx:key="*this" class="step__point">
+            <text class="step__dot">•</text>
+            <text class="t-sub">{{p}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 进度圆点 -->
+    <view class="dots">
+      <view
+        wx:for="{{steps}}"
+        wx:key="title"
+        class="dot {{index === current ? 'dot--on' : ''}}"
+      ></view>
+    </view>
+
+    <!-- 底部操作 -->
+    <view class="actions">
+      <view wx:if="{{current > 0}}" class="btn btn--ghost flex-1" bindtap="onPrev">上一步</view>
+      <view class="btn btn--primary flex-1" bindtap="onNext">{{isLast ? '开始使用' : '继续'}}</view>
+    </view>
+    <view class="t-caption foot-tip">第 {{current + 1}} / {{total}} 步</view>
+  </view>
+</view>

@@ -1,0 +1,13 @@
+<view class="nav" style="padding-top:{{statusBarHeight}}px; background:{{bg}}; border-bottom:{{bordered ? '1rpx solid var(--border)' : 'none'}}">
+  <view class="nav__inner">
+    <view class="nav__left" bindtap="onBack" wx:if="{{showBack}}">
+      <view class="nav__back-icon"></view>
+    </view>
+    <view class="nav__title {{center ? 'nav__title--center' : ''}}">{{title}}</view>
+    <view class="nav__right">
+      <slot name="right"></slot>
+      <text wx:if="{{rightText}}" class="nav__right-text t-accent" bindtap="onRightTap">{{rightText}}</text>
+    </view>
+  </view>
+</view>
+<view wx:if="{{placeholder}}" style="height:{{statusBarHeight + 44}}px"></view>

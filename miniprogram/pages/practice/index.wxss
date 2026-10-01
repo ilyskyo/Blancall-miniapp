@@ -1,0 +1,244 @@
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 8rpx 32rpx 16rpx;
+}
+
+.bar__item {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.bar__item .progress {
+  width: 200rpx;
+}
+
+/* ---------- 设置面板 ---------- */
+
+.mode-grid {
+  display: flex;
+  gap: 16rpx;
+}
+
+.mode-cell {
+  flex: 1;
+  border-radius: 24rpx;
+  border: 1rpx solid var(--border);
+  background: var(--bg-elev);
+  padding: 24rpx 16rpx;
+  text-align: center;
+}
+
+.mode-cell--active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.mode-cell__icon {
+  font-size: 44rpx;
+}
+
+.option-row {
+  min-height: 88rpx;
+}
+
+.section-picker {
+  max-height: 320rpx;
+  overflow-y: auto;
+  border-radius: 20rpx;
+  border: 1rpx solid var(--border);
+  padding: 16rpx;
+  margin-bottom: 16rpx;
+}
+
+.section-item {
+  padding: 14rpx 16rpx;
+  border-radius: 14rpx;
+  margin-bottom: 8rpx;
+  background: var(--bg-elev);
+}
+
+.section-item--selected {
+  background: var(--accent-soft);
+  border: 1rpx solid var(--accent);
+}
+
+.extra-input {
+  width: 100%;
+  min-height: 120rpx;
+  margin-top: 12rpx;
+  padding: 16rpx;
+  border-radius: 16rpx;
+  background: var(--bg-elev);
+  border: 1rpx solid var(--border);
+  font-size: 28rpx;
+}
+
+.sheet-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 28rpx;
+}
+
+/* ---------- AI 生成中 ---------- */
+
+.ai-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24rpx;
+  padding: 200rpx 60rpx;
+}
+
+.ai-loading__spinner {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  border: 6rpx solid var(--border);
+  border-top-color: var(--accent);
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- 作答区 ---------- */
+
+.content {
+  padding: 16rpx 32rpx 240rpx;
+}
+
+.text-flow {
+  word-break: break-all;
+}
+
+.seg-text {
+  white-space: pre-wrap;
+}
+
+.blank-input {
+  display: inline-block;
+  min-width: 80rpx;
+  height: 1.6em;
+  border-bottom: 2rpx solid var(--accent);
+  text-align: center;
+  margin: 0 6rpx;
+  font-size: inherit;
+  line-height: inherit;
+  color: var(--accent);
+  vertical-align: baseline;
+}
+
+.blank-input--right {
+  border-bottom-color: var(--success);
+  color: var(--success);
+}
+
+.blank-input--wrong {
+  border-bottom-color: var(--danger);
+  color: var(--danger);
+}
+
+.answer-tip {
+  color: var(--success);
+  font-size: 0.8em;
+  margin-left: 6rpx;
+}
+
+.hint-ghost {
+  color: var(--text-2);
+  margin-left: 2rpx;
+  animation: hint-fade 5s ease forwards;
+}
+
+@keyframes hint-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.65;
+  }
+}
+
+/* ---------- 反向默写 ---------- */
+
+.clue-list {
+  margin-bottom: 24rpx;
+}
+
+.clue-item {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 16rpx;
+  border-radius: 16rpx;
+  background: var(--bg-elev);
+  border: 1rpx solid var(--border);
+  margin-bottom: 12rpx;
+}
+
+.clue-item__index {
+  width: 40rpx;
+  color: var(--text-2);
+  font-size: 24rpx;
+}
+
+.clue-item__copy {
+  color: var(--accent);
+  font-size: 24rpx;
+}
+
+.dictation-input {
+  width: 100%;
+  min-height: 420rpx;
+  padding: 24rpx;
+  border-radius: 20rpx;
+  background: var(--bg-elev);
+  border: 1rpx solid var(--border);
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* ---------- 底部 ---------- */
+
+.footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20rpx 32rpx calc(20rpx + env(safe-area-inset-bottom));
+  background: var(--glass-bg);
+  border-top: 1rpx solid var(--border);
+  backdrop-filter: blur(24rpx);
+  -webkit-backdrop-filter: blur(24rpx);
+}
+
+.footer__actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 8rpx;
+}
+
+.graded-bar {
+  position: fixed;
+  left: 32rpx;
+  right: 32rpx;
+  bottom: calc(160rpx + env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 28rpx;
+  border-radius: 20rpx;
+  background: var(--bg-elev);
+  border: 1rpx solid var(--border);
+}
+
+.graded-bar__action {
+  color: var(--accent);
+}

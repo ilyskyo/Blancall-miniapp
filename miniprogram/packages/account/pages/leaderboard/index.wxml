@@ -1,0 +1,57 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="排行榜" />
+
+  <view class="page-body leaderboard-body">
+    <!-- 双榜切换 -->
+    <view class="seg">
+      <view class="seg__item {{tab === 'credit' ? 'seg__item--active' : ''}}" data-tab="credit" bindtap="onSwitchTab">Credit Hero</view>
+      <view class="seg__item {{tab === 'time' ? 'seg__item--active' : ''}}" data-tab="time" bindtap="onSwitchTab">学习时长</view>
+    </view>
+
+    <!-- 学习时长：周/总 -->
+    <view wx:if="{{tab === 'time'}}" class="seg seg--sub">
+      <view class="seg__item {{period === 'week' ? 'seg__item--active' : ''}}" data-period="week" bindtap="onSwitchPeriod">周榜</view>
+      <view class="seg__item {{period === 'all' ? 'seg__item--active' : ''}}" data-period="all" bindtap="onSwitchPeriod">总榜</view>
+    </view>
+
+    <view class="t-caption scope-note">
+      {{tab === 'credit' ? '按累计 credits 排名（每日签到 +1）' : '学习时长口径：练习时长 + 阅读时长'}}
+    </view>
+
+    <block wx:if="{{!loggedIn}}">
+      <empty-state icon="🔐" text="登录后参与排行榜" actionText="去登录" bind:action="onGoLogin" />
+    </block>
+
+    <block wx:else>
+      <view wx:if="{{empty}}" class="empty">
+        <view class="empty__icon">🏆</view>
+        <view class="t-sub">暂无排行数据，快去学习吧</view>
+      </view>
+
+      <view wx:else class="list">
+        <view wx:for="{{rows}}" wx:key="rank" class="list__item rank-item {{item.isMe ? 'rank-item--me' : ''}}">
+          <view class="rank-no {{item.rank <= 3 ? 'rank-no--top' : ''}}">{{item.rank}}</view>
+          <text class="flex-1 nickname">{{item.nickname}}</text>
+          <text class="score">{{item.scoreText}}</text>
+        </view>
+      </view>
+
+      <!-- 我的排名 -->
+      <view class="me-bar">
+        <view class="me-bar__label">我的排名</view>
+        <view class="me-bar__value">{{meText}}</view>
+      </view>
+
+      <!-- 上榜开关 -->
+      <view class="list rank-switch">
+        <view class="list__item">
+          <view class="flex-1">
+            <text class="list__label">在排行榜展示昵称</text>
+            <view class="t-caption">关闭后仅显示为「用户****」</view>
+          </view>
+          <glass-switch checked="{{rankVisible}}" bind:change="onToggleRank" />
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

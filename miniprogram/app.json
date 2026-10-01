@@ -1,0 +1,81 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/list/index",
+    "pages/overview/index",
+    "pages/library/index",
+    "pages/import/index",
+    "pages/practice/index",
+    "pages/result/index",
+    "pages/reader/index",
+    "pages/settings/index",
+    "pages/search/index",
+    "pages/onboarding/index",
+    "pages/help/index"
+  ],
+  "subpackages": [
+    {
+      "root": "packages/stats",
+      "name": "stats",
+      "pages": ["pages/statistics/index"]
+    },
+    {
+      "root": "packages/account",
+      "name": "account",
+      "pages": [
+        "pages/account/index",
+        "pages/checkin/index",
+        "pages/leaderboard/index",
+        "pages/space/index",
+        "pages/fonts/index",
+        "pages/uploads/index",
+        "pages/agreement/index"
+      ]
+    },
+    {
+      "root": "packages/tools",
+      "name": "tools",
+      "pages": [
+        "pages/tags/index",
+        "pages/custom-cloze/index",
+        "pages/custom-cloze-edit/index",
+        "pages/mask-config/index",
+        "pages/mask-edit/index",
+        "pages/sentence-cards/index"
+      ]
+    },
+    {
+      "root": "packages/ai",
+      "name": "ai",
+      "pages": ["pages/ai/index", "pages/ai-history/index"]
+    }
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "backgroundColor": "#F7F5F1",
+    "backgroundTextStyle": "dark",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "Blancall"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#8A8A8E",
+    "selectedColor": "#1C1C1E",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      { "pagePath": "pages/home/index", "text": "首页" },
+      { "pagePath": "pages/list/index", "text": "我的文章" },
+      { "pagePath": "pages/overview/index", "text": "数据" },
+      { "pagePath": "pages/library/index", "text": "素材库" }
+    ]
+  },
+  "darkmode": true,
+  "themeLocation": "theme.json",
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "renderer": "webview",
+  "__usePrivacyCheck__": true,
+  "usingComponents": {
+    "privacy-popup": "/components/privacy-popup/index"
+  }
+}

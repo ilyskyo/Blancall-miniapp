@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "lib": ["ES2019"],
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "noEmit": false,
+    "outDir": ".",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@tencent-ai/workbuddy-cloud-sdk/miniprogram": [
+        "node_modules/@tencent-ai/workbuddy-cloud-sdk/lib/miniprogram.d.ts"
+      ]
+    },
+    "types": ["node", "miniprogram-api-typings"]
+  },
+  "include": [
+    "app.ts",
+    "core/**/*.ts",
+    "components/**/*.ts",
+    "custom-tab-bar/**/*.ts",
+    "pages/**/*.ts",
+    "packages/**/*.ts",
+    "tests/**/*.ts"
+  ],
+  "exclude": ["node_modules", ".tsbuild", "dist"]
+}

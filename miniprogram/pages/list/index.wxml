@@ -1,0 +1,108 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="我的文章" showBack="{{false}}">
+    <view slot="right" class="nav-actions">
+      <view class="nav-action" bindtap="onOpenSearch">🔍</view>
+      <view class="nav-action" bindtap="onOpenImport">＋</view>
+      <view class="nav-action" bindtap="onToggleSelectMode">{{selectMode ? '完成' : '选择'}}</view>
+    </view>
+  </nav-bar>
+
+  <view class="page-body page-body--tabbar">
+    <!-- 排序 + 隐藏文章 -->
+    <view class="filters">
+      <view class="row gap-8">
+        <view
+          wx:for="{{sortOptions}}"
+          wx:key="value"
+          class="chip {{sortMode === item.value ? '' : 'chip--muted'}}"
+          data-mode="{{item.value}}"
+          bindtap="onSelectSort"
+        >{{item.label}}</view>
+      </view>
+      <view class="chip chip--muted" bindtap="onToggleShowHidden">
+        {{showHidden ? '隐藏中' : '含隐藏'}} {{hiddenCount}}
+      </view>
+    </view>
+
+    <!-- 标签筛选（多选） -->
+    <scroll-view wx:if="{{tags.length > 0}}" scroll-x class="tagbar" enable-flex>
+      <view class="tagbar__inner">
+        <view
+          wx:for="{{tags}}"
+          wx:key="uuid"
+          class="chip {{item.selected ? '' : 'chip--muted'}}"
+          data-uuid="{{item.uuid}}"
+          bindtap="onTapTag"
+        >{{item.name}}</view>
+        <view wx:if="{{tagFilter.length > 0}}" class="chip chip--muted" bindtap="onClearTags">清除筛选</view>
+      </view>
+    </scroll-view>
+
+    <view wx:if="{{totalCount > 0}}" class="t-caption count-line">共 {{totalCount}} 篇</view>
+
+    <empty-state
+      wx:if="{{rows.length === 0}}"
+      icon="📄"
+      text="还没有文章"
+      actionText="导入第一篇文章"
+      bind:action="onOpenImport"
+    />
+
+    <view wx:else class="list">
+      <view
+        wx:for="{{rows}}"
+        wx:key="uuid"
+        class="article-row list__item"
+        data-uuid="{{item.uuid}}"
+        bindtap="onTapArticle"
+        bindlongpress="onLongPressArticle"
+      >
+        <view class="flex-1 article-row__main">
+          <view class="row-between">
+            <text class="t-body article-row__title ellipsis">{{item.title}}</text>
+            <text wx:if="{{item.hidden}}" class="chip chip--muted">已隐藏</text>
+          </view>
+          <view class="t-sub clamp-2 article-row__excerpt">{{item.excerpt}}</view>
+          <view class="article-row__meta">
+            <view wx:for="{{item.tagNames}}" wx:for-item="tag" wx:key="*this" class="chip chip--muted">{{tag}}</view>
+            <text class="t-caption">{{item.timeText}}</text>
+            <text class="t-caption">正确率 {{item.accuracyText}}</text>
+          </view>
+        </view>
+        <view wx:if="{{selectMode}}" class="check {{item.selected ? 'check--on' : ''}}">{{item.selected ? '✓' : ''}}</view>
+        <view wx:else class="article-row__more" data-uuid="{{item.uuid}}" catchtap="onMoreArticle">⋯</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 批量操作栏 -->
+  <view wx:if="{{selectMode}}" class="bulk">
+    <view class="t-sub">已选 {{selectedCount}} 篇</view>
+    <view class="row gap-8">
+      <view class="btn btn--ghost btn--sm" bindtap="onToggleSelectMode">取消</view>
+      <view class="btn btn--ghost btn--sm" bindtap="onBulkCross">跨文复习</view>
+      <view class="btn btn--ghost btn--sm" bindtap="onBulkAskAi">问 AI</view>
+      <view class="btn btn--primary btn--sm" bindtap="onBulkDelete">删除</view>
+    </view>
+  </view>
+
+  <!-- 编辑标题 / 作者 -->
+  <block wx:if="{{editing}}">
+    <view class="mask" catchtap="cancelEdit"></view>
+    <view class="sheet">
+      <view class="sheet__title">编辑文章</view>
+      <view class="field">
+        <view class="t-caption">标题</view>
+        <input class="field__input" value="{{editTitle}}" bindinput="onEditTitleInput" placeholder="请输入标题" />
+      </view>
+      <view class="field">
+        <view class="t-caption">作者</view>
+        <input class="field__input" value="{{editAuthor}}" bindinput="onEditAuthorInput" placeholder="可选" />
+      </view>
+      <view class="row gap-12 sheet__actions">
+        <view class="btn btn--ghost flex-1" bindtap="cancelEdit">取消</view>
+        <view class="btn btn--primary flex-1" bindtap="saveEdit">保存</view>
+      </view>
+    </view>
+  </block>
+</view>

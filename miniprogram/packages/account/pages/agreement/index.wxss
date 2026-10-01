@@ -1,0 +1,36 @@
+/* 协议页样式（颜色一律走 CSS 变量） */
+
+.agreement-body {
+  padding-bottom: calc(80rpx + env(safe-area-inset-bottom));
+}
+
+.updated {
+  margin: 24rpx 4rpx;
+}
+
+.section {
+  margin-bottom: 32rpx;
+}
+
+.section__heading {
+  font-size: 32rpx;
+  font-weight: 600;
+  margin-bottom: 12rpx;
+}
+
+.section__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.paragraph {
+  font-size: 28rpx;
+  color: var(--text-2);
+  line-height: 1.7;
+}
+
+.contact {
+  margin: 40rpx 0 16rpx;
+  text-align: center;
+}

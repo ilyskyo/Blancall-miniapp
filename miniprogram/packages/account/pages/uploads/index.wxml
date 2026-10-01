@@ -1,0 +1,42 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="我的云端资料" />
+
+  <view class="page-body uploads-body">
+    <block wx:if="{{!loggedIn}}">
+      <empty-state icon="🔐" text="登录后可上传并管理云端资料" actionText="去登录" bind:action="onGoLogin" />
+    </block>
+
+    <block wx:else>
+      <view wx:if="{{spaceHint}}" class="card hint-card" bindtap="onTapSpace">
+        <text class="hint-text">{{spaceHint}}</text>
+        <text class="hint-link">去扩容 ›</text>
+      </view>
+
+      <view wx:if="{{docs.length === 0}}" class="empty">
+        <view class="empty__icon">🗂️</view>
+        <view class="t-sub">暂无云端资料</view>
+        <view class="t-caption">在「导入」页从聊天记录选择 PDF / DOCX 等文件上传</view>
+      </view>
+
+      <view wx:else class="list docs-list">
+        <view wx:for="{{docs}}" wx:key="id" class="doc-item">
+          <view class="row-between">
+            <view class="flex-1">
+              <text class="doc-name">{{item.name}}</text>
+              <view class="doc-meta">
+                <text class="t-caption">{{item.ext}} · {{item.sizeText}}</text>
+                <text class="doc-status {{item.statusClass}}">{{item.statusText}}</text>
+              </view>
+            </view>
+          </view>
+          <view class="doc-actions">
+            <view class="btn btn--sm btn--ghost" data-id="{{item.id}}" bindtap="onImport">导入到背诵</view>
+            <view class="btn btn--sm btn--danger" data-id="{{item.id}}" data-name="{{item.name}}" bindtap="onDelete">删除</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="t-caption privacy-note">云端资料仅本人可见；PDF 导入需「导入 PDF」会员权益。</view>
+    </block>
+  </view>
+</view>

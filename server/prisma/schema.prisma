@@ -1,0 +1,252 @@
+// Blancall 小程序后端 · Prisma schema
+// 覆盖 docs/03-数据模型.md §2 全部表 + 附录 A4 新增表（另含 skus 价格表与 rev 序列，见 README「假设与待确认」）
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------- 用户与会话
+
+model User {
+  id              String    @id @default(uuid()) @db.Uuid
+  openid          String    @unique
+  unionid         String?
+  nickname        String?
+  avatar          String?
+  rankVisible     Boolean   @default(true) @map("rank_visible")
+  credits         Int       @default(0)
+  streakCurrent   Int       @default(0) @map("streak_current")
+  streakLongest   Int       @default(0) @map("streak_longest")
+  lastCheckinDate DateTime? @map("last_checkin_date") @db.Date
+  spaceBytesUsed  BigInt    @default(0) @map("space_bytes_used")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  sessions      Session[]
+  entities      Entity[]
+  syncCursor    SyncCursor?
+  checkins      Checkin[]
+  creditLedgers CreditLedger[]
+  studyStats    StudyStat[]
+  uploads       Upload[]
+  aiSessions    AiSession[]
+  auditLogs     AuditLog[]
+  reminderLogs  ReminderSentLog[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(uuid()) @db.Uuid
+  token     String   @unique
+  userId    String   @map("user_id") @db.Uuid
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+// ---------------------------------------------------------------- 实体同步
+
+model Entity {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  entity    String
+  uuid      String
+  op        String
+  payload   Json
+  rev       BigInt
+  updatedAt DateTime @map("updated_at")
+  deleted   Boolean  @default(false)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, entity, uuid])
+  @@index([userId, rev])
+  @@index([userId, entity])
+  @@map("entities")
+}
+
+model SyncCursor {
+  userId String @id @map("user_id") @db.Uuid
+  cursor BigInt @default(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sync_cursors")
+}
+
+// ---------------------------------------------------------------- 权益与额度
+
+
+
+
+
+// ---------------------------------------------------------------- 交易
+
+
+
+// ---------------------------------------------------------------- 签到与激励
+
+model Checkin {
+  id           String   @id @default(uuid()) @db.Uuid
+  userId       String   @map("user_id") @db.Uuid
+  date         DateTime @db.Date
+  creditsDelta Int      @default(1) @map("credits_delta")
+  streakAfter  Int      @map("streak_after")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@map("checkins")
+}
+
+
+model CreditLedger {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  delta     Int
+  reason    String // checkin | reward | ...
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("credit_ledger")
+}
+
+// ---------------------------------------------------------------- 排行榜与学习统计
+
+model LeaderboardSnapshot {
+  id          String   @id @default(uuid()) @db.Uuid
+  type        String // credit | time
+  period      String // week | all
+  periodKey   String   @map("period_key")
+  payload     Json
+  generatedAt DateTime @default(now()) @map("generated_at")
+
+  @@unique([type, period, periodKey])
+  @@map("leaderboard_snapshots")
+}
+
+model StudyStat {
+  id              String   @id @default(uuid()) @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  date            DateTime @db.Date
+  practiceSeconds Int      @default(0) @map("practice_seconds")
+  readingSeconds  Int      @default(0) @map("reading_seconds")
+  practiceCount   Int      @default(0) @map("practice_count")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([date])
+  @@map("study_stats")
+}
+
+// ---------------------------------------------------------------- 上传
+
+model Upload {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  kind       String // document | font
+  name       String
+  ext        String
+  mime       String?
+  sizeBytes  BigInt   @map("size_bytes")
+  storageKey String   @map("storage_key")
+  status     String   @default("uploaded") // uploaded | parsed | failed
+  parsed     Json?
+  family     String?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, kind])
+  @@map("uploads")
+}
+
+// ---------------------------------------------------------------- AI
+
+model AiSession {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  title     String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages AiMessage[]
+
+  @@index([userId, updatedAt])
+  @@map("ai_sessions")
+}
+
+model AiMessage {
+  id        String   @id @default(uuid()) @db.Uuid
+  sessionId String   @map("session_id") @db.Uuid
+  role      String // system | user | assistant
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  session AiSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, createdAt])
+  @@map("ai_messages")
+}
+
+/// 平台级 AI 日预算用量（自然日 Asia/Shanghai）；date 为 YYYY-MM-DD 主键，使用原子自增避免并发超额
+model AiDailyUsage {
+  date      String   @id // YYYY-MM-DD
+  cardsUsed Int      @default(0) @map("cards_used")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("ai_daily_usage")
+}
+
+// ---------------------------------------------------------------- 日志
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String?  @map("user_id") @db.Uuid
+  action    String // event | error | ...
+  detail    Json?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([action, createdAt])
+  @@index([userId])
+  @@map("audit_logs")
+}
+
+// ---------------------------------------------------------------- 学习提醒
+
+model ReminderSentLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  date       DateTime @db.Date
+  sentAt     DateTime @default(now()) @map("sent_at")
+  templateId String?  @map("template_id")
+  result     String // pending | ok:<msgid> | fail:<errcode>:<errmsg> | skipped:<reason>
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([date])
+  @@map("reminder_sent_logs")
+}
+
+// ---------------------------------------------------------------- 商品（价格单一事实源）
+

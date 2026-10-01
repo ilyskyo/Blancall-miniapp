@@ -1,0 +1,84 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="遮罩编辑" rightText="保存" bind:righttap="onSave" />
+
+  <view class="page-body">
+    <view class="card head-card">
+      <input class="editor-input" value="{{name}}" placeholder="配置名称" maxlength="20" bindinput="onNameInput" />
+      <view class="t-caption">先选段落，再点击字符设起点/终点选定区间；长按可把分句按 句→词→字 循环拆解。</view>
+    </view>
+
+
+    <!-- 段落列表 -->
+    <view class="card">
+      <view class="t-headline">段落（{{paragraphs.length}}）</view>
+      <scroll-view class="para-list" scroll-y>
+        <view wx:for="{{paragraphs}}" wx:key="index" class="{{item.cls}}" data-index="{{item.index}}" bindtap="onPickPara">
+          <view class="para-row__no">第 {{item.no}} 段</view>
+          <view class="para-row__text ellipsis">{{item.preview}}</view>
+          <view class="chip chip--muted">{{item.spanCount}} 遮挡</view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 段内编辑 -->
+    <view class="card">
+      <view class="row-between">
+        <view class="t-headline">段内编辑</view>
+        <view class="t-caption">颜色</view>
+      </view>
+      <view class="palette">
+        <view
+          wx:for="{{palette}}"
+          wx:key="index"
+          class="palette__item {{item.cls}}"
+          style="background:{{item.color}}"
+          data-index="{{item.index}}"
+          bindtap="onPickColor"
+        ></view>
+      </view>
+      <view class="edit-text">
+        <text
+          wx:for="{{chars}}"
+          wx:key="ci"
+          wx:for-item="ch"
+          class="{{ch.cls}}"
+          style="{{ch.style}}"
+          data-ci="{{ch.ci}}"
+          bindtap="onTapChar"
+          bindlongpress="onLongPress"
+        >{{ch.ch}}</text>
+      </view>
+    </view>
+
+    <!-- 预览 -->
+    <view class="card">
+      <view class="row-between">
+        <view class="t-headline">预览</view>
+        <view class="t-caption">点击遮挡块可揭示/遮回</view>
+      </view>
+      <view class="preview">
+        <text
+          wx:for="{{preview}}"
+          wx:key="key"
+          wx:for-item="seg"
+          class="{{seg.cls}}"
+          style="{{seg.style}}"
+          data-key="{{seg.key}}"
+          bindtap="onToggleReveal"
+        >{{seg.text}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 工具条 -->
+  <view class="toolbar">
+    <view class="toolbar__info">{{spanCount}} 个遮挡 · {{dirtyText}}</view>
+    <view class="toolbar__btns">
+      <view class="tb-btn {{canUndo ? '' : 'tb-btn--off'}}" bindtap="onUndo">撤销</view>
+      <view class="tb-btn {{canRedo ? '' : 'tb-btn--off'}}" bindtap="onRedo">重做</view>
+      <view class="tb-btn" bindtap="onClearPara">清空本段</view>
+      <view class="tb-btn tb-btn--primary" bindtap="onSave">保存</view>
+    </view>
+  </view>
+
+</view>

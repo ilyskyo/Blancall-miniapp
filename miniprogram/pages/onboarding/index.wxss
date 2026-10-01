@@ -1,0 +1,94 @@
+/* 首启引导：卡片式 5 步 */
+
+.skip {
+  font-size: 28rpx;
+  color: var(--text-2);
+  padding: 0 4rpx;
+}
+
+.onboard {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 220rpx);
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.step {
+  opacity: 0.55;
+}
+
+.step--active {
+  opacity: 1;
+}
+
+.step__icon {
+  font-size: 64rpx;
+  line-height: 1;
+  margin-bottom: 16rpx;
+}
+
+.step__title {
+  margin-bottom: 12rpx;
+}
+
+.step__desc {
+  color: var(--text-2);
+  line-height: 1.6;
+}
+
+.step__points {
+  margin-top: 20rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.step__point {
+  display: flex;
+  align-items: flex-start;
+  gap: 10rpx;
+}
+
+.step__dot {
+  color: var(--accent);
+  line-height: 1.5;
+}
+
+/* 进度圆点 */
+.dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  margin: 40rpx 0 24rpx;
+}
+
+.dot {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.dot--on {
+  width: 32rpx;
+  border-radius: 999rpx;
+  background: var(--accent);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-top: auto;
+}
+
+.foot-tip {
+  text-align: center;
+  margin: 20rpx 0 40rpx;
+}

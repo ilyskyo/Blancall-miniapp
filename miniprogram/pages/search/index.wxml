@@ -1,0 +1,52 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="搜索" />
+
+  <view class="page-body">
+    <!-- 搜索输入（实时过滤） -->
+    <view class="searchbar">
+      <view class="searchbar__icon">🔍</view>
+      <input
+        class="searchbar__input"
+        value="{{keyword}}"
+        bindinput="onInput"
+        bindconfirm="onConfirm"
+        confirm-type="search"
+        placeholder="输入关键词，或日期如 2026-09-27"
+        placeholder-class="searchbar__ph"
+      />
+      <view wx:if="{{keyword}}" class="searchbar__clear" bindtap="onClear">✕</view>
+    </view>
+
+    <view wx:if="{{searched}}" class="t-caption count-line">找到 {{resultCount}} 篇</view>
+
+    <empty-state
+      wx:if="{{searched && resultCount === 0}}"
+      icon="🔍"
+      text="没有匹配的文章，试试其他关键词或日期"
+    />
+    <empty-state wx:elif="{{!searched}}" icon="🔍" text="输入关键词或日期开始检索" />
+
+    <view wx:else class="list">
+      <view
+        wx:for="{{results}}"
+        wx:key="uuid"
+        class="result list__item"
+        data-uuid="{{item.uuid}}"
+        bindtap="onTapResult"
+      >
+        <view class="flex-1 result__main">
+          <view class="result__title">
+            <text wx:for="{{item.titleSegments}}" wx:for-item="seg" wx:key="index" class="{{seg.hit ? 'hl' : ''}}">{{seg.text}}</text>
+          </view>
+          <view class="t-sub result__excerpt">
+            <text wx:for="{{item.excerptSegments}}" wx:for-item="seg" wx:key="index" class="{{seg.hit ? 'hl' : ''}}">{{seg.text}}</text>
+          </view>
+          <view class="result__meta">
+            <text class="chip chip--muted">{{item.matchLabel}}</text>
+            <text class="t-caption">{{item.timeText}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

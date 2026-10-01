@@ -1,0 +1,49 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="我的字体" />
+
+  <view class="page-body fonts-body">
+    <view class="card copyright-card">
+      <view class="t-body">版权提示</view>
+      <view class="t-caption copyright-desc">仅支持 TTF / OTF（≤20MB），仅供个人阅读使用；请勿上传未获授权的字体。</view>
+    </view>
+
+    <block wx:if="{{!loggedIn}}">
+      <empty-state icon="🔐" text="登录后可上传并使用自定义字体" actionText="去登录" bind:action="onGoLogin" />
+    </block>
+
+    <block wx:else>
+      <!-- 预览 -->
+      <view class="group__title">预览</view>
+      <view class="card preview-card">
+        <view class="preview-text" style="font-family:{{previewFamily}}">{{previewText}}</view>
+      </view>
+
+      <view class="group__title">我的字体</view>
+      <view wx:if="{{fonts.length === 0}}" class="empty">
+        <view class="empty__icon">🔤</view>
+        <view class="t-sub">还没有上传字体</view>
+      </view>
+      <view wx:else class="list">
+        <view wx:for="{{fonts}}" wx:key="id" class="font-item">
+          <view class="row-between">
+            <view class="flex-1">
+              <text class="list__label">{{item.family}}</text>
+              <view class="t-caption">{{item.sizeText}}{{previewingId === item.id ? ' · 预览中' : ''}}</view>
+            </view>
+            <view class="font-actions">
+              <view class="btn btn--sm" data-id="{{item.id}}" data-family="{{item.family}}" data-url="{{item.url}}" bindtap="onPreview">预览</view>
+              <view class="btn btn--sm" data-family="{{item.family}}" bindtap="onSetReading">设为阅读字体</view>
+              <view class="btn btn--sm btn--danger" data-id="{{item.id}}" data-family="{{item.family}}" bindtap="onDelete">删除</view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="upload-wrap">
+        <view class="btn btn--primary btn--block" bindtap="onUpload">上传字体（TTF / OTF）</view>
+      </view>
+    </block>
+  </view>
+</view>
+
+<privacy-popup />

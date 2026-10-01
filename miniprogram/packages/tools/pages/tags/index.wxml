@@ -1,0 +1,49 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="标签管理" rightText="{{rightText}}" bind:righttap="onNew" />
+
+  <view class="page-body">
+
+    <view wx:if="{{tags.length > 0}}" class="list tag-list">
+      <view wx:for="{{tags}}" wx:key="uuid" class="tag-row">
+        <view class="tag-row__dot" style="background:{{item.colorHex}}"></view>
+        <view class="flex-1">
+          <view class="list__label ellipsis">{{item.name}}</view>
+          <view class="t-caption">{{item.articleCount}} 篇文章</view>
+        </view>
+        <view class="tag-actions">
+          <view class="{{item.upCls}}" data-uuid="{{item.uuid}}" data-dir="-1" bindtap="onMove">↑</view>
+          <view class="{{item.downCls}}" data-uuid="{{item.uuid}}" data-dir="1" bindtap="onMove">↓</view>
+          <view class="icon-btn" data-uuid="{{item.uuid}}" bindtap="onEdit">编辑</view>
+          <view class="icon-btn icon-btn--danger" data-uuid="{{item.uuid}}" bindtap="onDelete">删除</view>
+        </view>
+      </view>
+    </view>
+
+    <empty-state wx:if="{{tags.length === 0}}" icon="🏷️" text="还没有标签" actionText="{{rightText}}" bind:action="onNew" />
+
+    <view wx:if="{{tags.length > 0}}" class="t-caption tag-hint">标签可在「我的文章」中用于筛选；本页显示每个标签下的文章数。</view>
+  </view>
+
+  <!-- 标签编辑浮层 -->
+  <view wx:if="{{showEditor}}" class="mask" bindtap="onCancelEdit"></view>
+  <view wx:if="{{showEditor}}" class="sheet">
+    <view class="sheet__title">{{editorTitle}}</view>
+    <input class="editor-input" value="{{editName}}" placeholder="标签名称（最多 12 字）" maxlength="12" bindinput="onNameInput" />
+    <view class="t-sub editor-label">颜色</view>
+    <view class="palette">
+      <view
+        wx:for="{{palette}}"
+        wx:key="index"
+        class="palette__item {{item.cls}}"
+        style="background:{{item.color}}"
+        data-index="{{item.index}}"
+        bindtap="onPickColor"
+      ></view>
+    </view>
+    <view class="sheet-actions">
+      <view class="btn btn--ghost flex-1" bindtap="onCancelEdit">取消</view>
+      <view class="btn btn--primary flex-1" bindtap="onConfirmEdit">保存</view>
+    </view>
+  </view>
+
+</view>

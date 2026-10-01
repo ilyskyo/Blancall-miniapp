@@ -1,0 +1,4 @@
+.empty__icon {
+  font-size: 72rpx;
+  opacity: 0.5;
+}

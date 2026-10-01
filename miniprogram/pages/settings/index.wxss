@@ -1,0 +1,101 @@
+﻿/* 设置页样式（颜色一律走 CSS 变量） */
+
+.settings-body {
+  padding-bottom: calc(80rpx + env(safe-area-inset-bottom));
+}
+
+.group__title {
+  font-size: 26rpx;
+  color: var(--text-2);
+  font-weight: 600;
+  margin: 36rpx 8rpx 16rpx;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 96rpx;
+  padding: 8rpx 0;
+  gap: 16rpx;
+}
+
+.setting-value {
+  max-width: 340rpx;
+  color: var(--text-2);
+  font-size: 26rpx;
+}
+
+.setting-desc {
+  margin-top: 6rpx;
+  line-height: 1.4;
+}
+
+.setting-danger {
+  color: var(--danger);
+}
+
+.chevron {
+  color: var(--text-2);
+  font-size: 34rpx;
+  line-height: 1;
+}
+
+/* 分段控件 */
+.seg {
+  display: flex;
+  background: var(--bg-elev);
+  border: 1rpx solid var(--border);
+  border-radius: 999rpx;
+  padding: 6rpx;
+  margin: 8rpx 0 16rpx;
+}
+
+.seg__item {
+  flex: 1;
+  text-align: center;
+  height: 68rpx;
+  line-height: 68rpx;
+  border-radius: 999rpx;
+  font-size: 26rpx;
+  color: var(--text-2);
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.seg__item--active {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+/* 主题色预设 */
+.accents {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22rpx;
+  padding: 8rpx 0 16rpx;
+}
+
+.accent {
+  width: 116rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.accent__dot {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  border: 4rpx solid transparent;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.12);
+}
+
+.accent--active .accent__dot {
+  border-color: var(--text);
+}
+
+.logout-wrap {
+  margin: 40rpx 0 24rpx;
+}

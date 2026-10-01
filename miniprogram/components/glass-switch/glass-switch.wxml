@@ -1,0 +1,3 @@
+<view class="switch {{checked ? 'switch--on' : ''}}" bindtap="onToggle" style="opacity:{{disabled ? 0.45 : 1}}">
+  <view class="switch__knob"></view>
+</view>

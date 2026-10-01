@@ -1,0 +1,17 @@
+<view wx:if="{{show}}" class="pp-mask">
+  <view class="pp-card">
+    <view class="pp-title">用户隐私保护指引</view>
+    <view class="pp-body">
+      在使用头像昵称、上传文档与字体、保存图片、复制内容等功能前，请阅读并同意
+      <text class="pp-link" bindtap="onOpenContract">《用户隐私保护指引》</text>。
+      拒绝后相关功能无法使用，不影响其他功能。
+    </view>
+    <button
+      id="agree-btn"
+      class="pp-btn pp-btn--primary"
+      open-type="agreePrivacyAuthorization"
+      bindagreeprivacyauthorization="onAgree"
+    >同意并继续</button>
+    <view class="pp-btn pp-btn--ghost" bindtap="onDisagree">暂不使用</view>
+  </view>
+</view>

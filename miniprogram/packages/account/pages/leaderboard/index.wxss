@@ -1,0 +1,108 @@
+﻿/* 排行榜样式（颜色一律走 CSS 变量） */
+
+.leaderboard-body {
+  padding-bottom: calc(80rpx + env(safe-area-inset-bottom));
+}
+
+/* 分段控件（与设置页一致） */
+.seg {
+  display: flex;
+  background: var(--bg-elev);
+  border: 1rpx solid var(--border);
+  border-radius: 999rpx;
+  padding: 6rpx;
+  margin: 24rpx 0 0;
+}
+
+.seg--sub {
+  margin-top: 16rpx;
+}
+
+.seg__item {
+  flex: 1;
+  text-align: center;
+  height: 68rpx;
+  line-height: 68rpx;
+  border-radius: 999rpx;
+  font-size: 26rpx;
+  color: var(--text-2);
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.seg__item--active {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+.scope-note {
+  margin: 16rpx 4rpx;
+  line-height: 1.5;
+}
+
+.rank-item {
+  gap: 16rpx;
+}
+
+.rank-item--me {
+  background: var(--accent-soft);
+}
+
+.rank-no {
+  width: 56rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: var(--text-2);
+  font-weight: 600;
+}
+
+.rank-no--top {
+  color: var(--accent);
+}
+
+.nickname {
+  font-size: 30rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.score {
+  font-size: 28rpx;
+  color: var(--text-2);
+}
+
+/* 我的排名：固定底部（小程序对 sticky 支持不稳定，改用 fixed + 底部占位） */
+.me-bar {
+  position: fixed;
+  left: 24rpx;
+  right: 24rpx;
+  bottom: calc(24rpx + env(safe-area-inset-bottom));
+  z-index: 40;
+  padding: 24rpx 28rpx;
+  border-radius: 24rpx;
+  background: var(--accent-soft);
+  border: 1rpx solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 为固定底栏预留滚动空间 */
+.leaderboard-body {
+  padding-bottom: calc(180rpx + env(safe-area-inset-bottom));
+}
+
+.me-bar__label {
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.me-bar__value {
+  font-size: 26rpx;
+  color: var(--text);
+}
+
+.rank-switch {
+  margin-top: 24rpx;
+}

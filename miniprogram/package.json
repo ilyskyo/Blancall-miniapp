@@ -1,0 +1,23 @@
+{
+  "name": "blancall-miniprogram",
+  "version": "1.0.0",
+  "description": "Blancall 微信小程序（原生 TypeScript）",
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "build:tests": "tsc -p tsconfig.node.json",
+    "test": "npm run build:tests && node --test .tsbuild/tests/",
+    "check:pages": "node ../scripts/check-pages.js",
+    "check:bindings": "node ../scripts/check-bindings.js",
+    "check:contract": "node ../scripts/check-contract.js",
+    "verify": "node ../scripts/verify-all.js && npm run typecheck && npm test"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "miniprogram-api-typings": "^4.0.0",
+    "typescript": "~5.4.5"
+  },
+  "dependencies": {
+    "@tencent-ai/workbuddy-cloud-sdk": "^0.1.2-dev.1b37f73.202609222026"
+  }
+}

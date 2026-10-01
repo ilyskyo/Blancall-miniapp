@@ -1,0 +1,77 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="练习结果" />
+
+  <view class="page-body">
+    <!-- 总览 -->
+    <view class="glass-card summary">
+      <view class="summary__ring">
+        <view class="ring" style="background: conic-gradient(var(--accent) {{accuracyPercent}}%, var(--border) 0);">
+          <view class="ring__inner">
+            <view class="ring__value">{{accuracyPercent}}%</view>
+            <view class="t-caption">正确率</view>
+          </view>
+        </view>
+      </view>
+      <view class="summary__meta">
+        <view class="t-body">正确 {{correctCount}} / {{totalBlanks}}</view>
+        <view class="t-sub">模式：{{modeLabel}}</view>
+        <view class="t-sub">相似度 {{similarityText}} · 耗时 {{durationText}}</view>
+        <view wx:if="{{partial}}" class="chip">已保存断点，可继续练习</view>
+      </view>
+    </view>
+
+    <!-- 操作 -->
+    <view class="actions">
+      <view wx:if="{{partial}}" class="btn btn--primary flex-1" bindtap="onContinue">继续练习</view>
+      <view class="btn btn--ghost flex-1" bindtap="onRetry">再练一次</view>
+      <view class="btn btn--ghost flex-1" bindtap="onReadArticle">阅读原文</view>
+    </view>
+    <view class="actions">
+      <view class="btn btn--ghost flex-1" bindtap="onShareImage">生成分享图</view>
+      <view class="btn btn--ghost flex-1" bindtap="onExportPdf">导出 PDF 试卷</view>
+    </view>
+
+    <!-- AI 训练分析 -->
+    <view class="card analysis-card">
+      <view class="t-headline">AI 训练分析</view>
+      <view wx:if="{{!analysis}}" class="t-sub">AI 训练分析即将上线</view>
+      <view wx:if="{{analysisLoading}}" class="t-sub">AI 正在分析…</view>
+      <view wx:if="{{analysis}}" class="analysis-text">{{analysis}}</view>
+      <view wx:if="{{!analysis && !analysisLoading}}" class="btn btn--primary btn--sm" bindtap="onAnalyze">开始分析</view>
+    </view>
+
+    <!-- 逐空结果 -->
+    <view class="card">
+      <view class="row-between">
+        <view class="t-headline">逐空结果</view>
+        <view class="t-caption">共 {{totalBlanks}} 空</view>
+      </view>
+      <view wx:for="{{blankResults}}" wx:key="index" class="blank-row">
+        <view class="blank-row__index">{{item.index + 1}}</view>
+        <view class="flex-1">
+          <view class="t-sub">你的答案：<text class="{{item.correct ? 'ok' : 'bad'}}">{{item.user || '（未填）'}}</text></view>
+          <view wx:if="{{!item.correct}}" class="t-sub">正确答案：<text class="ok">{{item.answer}}</text></view>
+        </view>
+        <view class="chip {{item.correct ? '' : 'chip--muted'}}">{{item.label}}</view>
+      </view>
+    </view>
+
+    <!-- 反向默写分句结果 -->
+    <view wx:if="{{dictationRows.length > 0}}" class="card">
+      <view class="t-headline">分句对照</view>
+      <view wx:for="{{dictationRows}}" wx:key="index" class="blank-row">
+        <view class="blank-row__index">{{item.index + 1}}</view>
+        <view class="flex-1">
+          <view class="t-sub">原文：{{item.original}}</view>
+          <view class="t-sub">你的作答：<text class="{{item.correct ? 'ok' : 'bad'}}">{{item.user || '（空）'}}</text></view>
+        </view>
+        <view class="chip {{item.correct ? '' : 'chip--muted'}}">{{item.label}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 分享图 canvas（离屏） -->
+  <canvas type="2d" id="shareCanvas" class="share-canvas"></canvas>
+</view>
+
+<privacy-popup />

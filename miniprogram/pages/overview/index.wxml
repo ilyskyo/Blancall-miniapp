@@ -1,0 +1,211 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="数据" showBack="{{false}}" />
+
+  <view class="page-body page-body--tabbar">
+    <block wx:if="{{view}}">
+      <!-- 顶部入口 -->
+      <view class="entry-row">
+        <view class="entry glass-card" bindtap="onTapCheckin">
+          <view class="entry__icon">📅</view>
+          <view class="entry__main">
+            <text class="entry__title">{{checkinCheckedIn ? '今日已签到' : '去签到'}}</text>
+            <text class="t-caption">连续 {{checkinStreak}} 天</text>
+          </view>
+        </view>
+        <view class="entry glass-card" bindtap="onTapLeaderboard">
+          <view class="entry__icon">🏆</view>
+          <view class="entry__main">
+            <text class="entry__title">排行榜</text>
+            <text class="t-caption">Credit / 时长</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 数据总览 -->
+      <view class="group__title">数据总览</view>
+      <view class="card">
+        <view class="ring-wrap">
+          <view class="ring" style="{{view.accuracyRing}}">
+            <view class="ring__hole">
+              <text class="ring__value">{{view.accuracyPercent}}%</text>
+              <text class="t-caption">总正确率</text>
+            </view>
+          </view>
+          <view class="metrics">
+            <view class="metric"><text class="metric__value">{{view.streak}}</text><text class="t-caption">连续天数</text></view>
+            <view class="metric"><text class="metric__value">{{view.longestStreak}}</text><text class="t-caption">最长连续</text></view>
+            <view class="metric"><text class="metric__value">{{view.practiceCount}}</text><text class="t-caption">练习次数</text></view>
+            <view class="metric"><text class="metric__value">{{view.articleCount}}</text><text class="t-caption">涉及文章</text></view>
+          </view>
+        </view>
+        <view class="divider"></view>
+        <view class="row-between kv-row"><text class="t-sub">累计练习时长</text><text class="kv-row__value">{{view.studyText}}</text></view>
+        <view class="row-between kv-row"><text class="t-sub">累计阅读时长</text><text class="kv-row__value">{{view.readingText}}</text></view>
+        <view class="row-between kv-row"><text class="t-sub">总填空数</text><text class="kv-row__value">{{view.totalBlanks}}</text></view>
+      </view>
+
+      <!-- 今日目标 -->
+      <view class="card">
+        <view class="row-between">
+          <view>
+            <text class="t-headline">今日目标</text>
+            <view class="t-caption">每天 {{view.todayGoal}} 次练习</view>
+          </view>
+          <view class="btn btn--sm btn--ghost" bindtap="onChangeGoal">修改</view>
+        </view>
+        <view class="progress goal-progress"><view class="progress__bar" style="width:{{view.todayPercent}}%"></view></view>
+        <text class="t-sub">今日已完成 {{view.todayDone}} / {{view.todayGoal}} 次</text>
+      </view>
+
+      <!-- 即将遗忘 -->
+      <block wx:if="{{view.due.length > 0}}">
+        <view class="group__title">⏰ 即将遗忘</view>
+        <view class="list">
+          <view
+            wx:for="{{view.due}}"
+            wx:key="articleUuid"
+            class="list__item"
+            data-uuid="{{item.articleUuid}}"
+            bindtap="onTapArticle"
+          >
+            <view class="flex-1">
+              <text class="list__label ellipsis">{{item.title}}</text>
+              <view class="t-caption">{{item.daysText}} · 留存 {{item.retentionPercent}}%</view>
+            </view>
+            <text class="chip {{item.urgencyClass}}">{{item.urgencyLabel}}</text>
+          </view>
+        </view>
+      </block>
+
+      <!-- 句子记忆 -->
+      <view class="group__title">句子记忆</view>
+      <view class="card metric-grid">
+        <view class="metric"><text class="metric__value">{{view.sentence.remembered}}</text><text class="t-caption">已记句子</text></view>
+        <view class="metric"><text class="metric__value">{{view.sentence.totalReviews}}</text><text class="t-caption">累计复习</text></view>
+        <view class="metric"><text class="metric__value">{{view.sentence.forgettingPercent}}%</text><text class="t-caption">遗忘率</text></view>
+        <view class="metric"><text class="metric__value">{{view.sentence.avgRetentionPercent}}%</text><text class="t-caption">平均留存</text></view>
+        <view class="metric"><text class="metric__value">{{view.sentence.dueToday}}</text><text class="t-caption">今日待复习</text></view>
+      </view>
+
+      <!-- 趋势 -->
+      <view class="group__title">近 14 天练习趋势</view>
+      <view class="card">
+        <view class="trend">
+          <view wx:for="{{view.trend}}" wx:key="label" class="trend__col">
+            <view class="trend__track"><view class="trend__bar" style="height:{{item.heightPercent}}%"></view></view>
+            <text class="trend__count">{{item.count > 0 ? item.count : ''}}</text>
+            <text class="trend__label">{{item.label}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 学习日历 -->
+      <view class="group__title">学习日历（近 12 周）</view>
+      <view class="card">
+        <view class="cal">
+          <view wx:for="{{view.calendarWeeks}}" wx:for-item="week" wx:key="k" class="cal__col">
+            <view
+              wx:for="{{week.days}}"
+              wx:for-item="cell"
+              wx:key="key"
+              class="cal__cell {{cell.blank ? 'cal__cell--blank' : ''}} cal__l{{cell.level}}"
+            ></view>
+          </view>
+        </view>
+        <view class="cal-legend">
+          <text class="t-caption">少</text>
+          <view class="cal__cell cal__l1"></view>
+          <view class="cal__cell cal__l2"></view>
+          <view class="cal__cell cal__l3"></view>
+          <view class="cal__cell cal__l4"></view>
+          <text class="t-caption">多</text>
+        </view>
+      </view>
+
+      <!-- 能力画像 -->
+      <view class="group__title">能力画像</view>
+      <view class="card">
+        <text class="t-sub">弱点雷达</text>
+        <canvas wx:if="{{view.practiceCount > 0}}" type="2d" id="radar" class="radar"></canvas>
+        <view wx:else class="canvas-empty">
+          <text class="t-sub">暂无练习数据，完成练习后生成弱点画像</text>
+        </view>
+        <view class="row-between kv-row">
+          <text class="t-sub">进步趋势</text>
+          <text class="{{view.progressClass}}">{{view.progressLabel}}（{{view.progressDeltaText}}）</text>
+        </view>
+      </view>
+
+      <view class="card">
+        <text class="t-sub">模式对比</text>
+        <view wx:for="{{view.modes}}" wx:key="label" class="bar-row">
+          <text class="bar-row__label">{{item.label}}</text>
+          <view class="bar-row__track"><view class="bar-row__fill" style="width:{{item.accuracyPercent}}%"></view></view>
+          <text class="bar-row__value">{{item.count}} 次 · {{item.accuracyPercent}}%</text>
+        </view>
+      </view>
+
+      <view wx:if="{{view.weakness.length > 0}}" class="card">
+        <text class="t-sub">薄弱环节</text>
+        <view wx:for="{{view.weakness}}" wx:key="label" class="bar-row">
+          <text class="bar-row__label">{{item.label}}</text>
+          <view class="bar-row__track"><view class="bar-row__fill bar-row__fill--warn" style="width:{{item.ratioPercent}}%"></view></view>
+          <text class="bar-row__value">{{item.ratioPercent}}%</text>
+        </view>
+      </view>
+
+      <!-- 成就 -->
+      <view class="group__title">成就徽章</view>
+      <view class="card ach-grid">
+        <view wx:for="{{view.achievements}}" wx:key="id" class="ach {{item.unlocked ? '' : 'ach--locked'}}">
+          <view class="ach__icon">{{item.icon}}</view>
+          <text class="ach__title">{{item.title}}</text>
+          <text class="t-caption">{{item.unlocked ? '已解锁' : item.progressText}}</text>
+          <view wx:if="{{!item.unlocked}}" class="ach__progress">
+            <view class="ach__progress-bar" style="width:{{item.progressPercent}}%"></view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 需加强的文章 -->
+      <block wx:if="{{view.weakest.length > 0}}">
+        <view class="group__title">需加强的文章</view>
+        <view class="list">
+          <view
+            wx:for="{{view.weakest}}"
+            wx:key="articleUuid"
+            class="list__item"
+            data-uuid="{{item.articleUuid}}"
+            bindtap="onTapArticle"
+          >
+            <text class="list__label ellipsis flex-1">{{item.title}}</text>
+            <text class="list__value">正确率 {{item.accuracyPercent}}%</text>
+          </view>
+        </view>
+      </block>
+
+      <!-- 标签分布 -->
+      <block wx:if="{{view.tags.length > 0}}">
+        <view class="group__title">标签分布</view>
+        <view class="card tag-wrap">
+          <view wx:for="{{view.tags}}" wx:key="name" class="tag tag-c{{item.colorIndex}}">
+            <text>{{item.name}}</text>
+            <text class="tag__count">{{item.count}}</text>
+          </view>
+        </view>
+      </block>
+
+      <!-- 最近训练分析 -->
+      <block wx:if="{{analysis}}">
+        <view class="group__title">最近训练分析</view>
+        <view class="card" bindtap="onTapAnalysis">
+          <text class="t-headline">{{analysis.title}}</text>
+          <text class="t-sub analysis-body">{{analysis.markdown}}</text>
+          <text class="t-caption">查看完整分析 ›</text>
+        </view>
+      </block>
+    </block>
+
+    <view wx:else class="empty"><text class="t-sub">加载中…</text></view>
+  </view>
+</view>

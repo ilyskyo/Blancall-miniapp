@@ -1,0 +1,9 @@
+<view class="lock-overlay" wx:if="{{visible}}" catchtap="noop">
+  <view class="lock-card glass-card">
+    <view class="t-headline">{{title}}</view>
+    <view class="t-sub lock-desc">{{desc}}</view>
+    <view class="lock-actions">
+      <view class="btn btn--primary btn--block" bindtap="onClose">{{ctaText}}</view>
+    </view>
+  </view>
+</view>

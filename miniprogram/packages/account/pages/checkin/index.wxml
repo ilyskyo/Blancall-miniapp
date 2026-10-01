@@ -1,0 +1,78 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="每日签到" />
+
+  <view class="page-body checkin-body">
+    <block wx:if="{{!loggedIn}}">
+      <empty-state icon="🔐" text="登录后即可签到赚 credits" actionText="去登录" bind:action="onGoLogin" />
+    </block>
+
+    <block wx:else>
+      <!-- 签到卡 -->
+      <view class="glass-card checkin-card">
+        <view class="checkin-stats">
+          <view class="stat">
+            <view class="stat__num">{{streakCurrent}}</view>
+            <view class="t-caption">连续天数</view>
+          </view>
+          <view class="stat">
+            <view class="stat__num">{{credits}}</view>
+            <view class="t-caption">累计 credits</view>
+          </view>
+          <view class="stat">
+            <view class="stat__num">{{streakLongest}}</view>
+            <view class="t-caption">最长连续</view>
+          </view>
+        </view>
+        <view
+          class="btn btn--primary btn--block checkin-btn {{todayChecked ? 'btn--ghost' : ''}}"
+          bindtap="onCheckin"
+        >{{todayChecked ? '今日已签到' : '立即签到（+1 credit）'}}</view>
+        <view wx:if="{{rewardText}}" class="t-caption reward-text">{{rewardText}}</view>
+      </view>
+
+      <!-- 里程碑 -->
+      <view class="group__title">连续签到里程碑</view>
+      <view class="card">
+        <view wx:for="{{milestones}}" wx:key="days" class="milestone">
+          <view class="milestone__head">
+            <text class="list__label">{{item.days}} 天</text>
+            <text class="chip {{item.reached ? '' : 'chip--muted'}}">{{item.reached ? '已达成' : '未达成'}}</text>
+          </view>
+          <view class="t-caption">{{item.label}}（Pro 体验卡，到期后自动回落）</view>
+        </view>
+        <view class="t-caption milestone-note">里程碑每轮各发放一次，连续中断后重新计算。</view>
+      </view>
+
+      <!-- 月历 -->
+      <view class="group__title">签到日历</view>
+      <view class="card">
+        <view class="cal-head">
+          <view class="cal-nav" bindtap="onPrevMonth">‹</view>
+          <text class="cal-title">{{monthLabel}}</text>
+          <view class="cal-nav {{canGoNext ? '' : 'cal-nav--disabled'}}" bindtap="onNextMonth">›</view>
+        </view>
+        <view class="cal-week">
+          <view wx:for="{{weekdays}}" wx:key="*this" class="cal-week__item">{{item}}</view>
+        </view>
+        <view class="cal-grid">
+          <view
+            wx:for="{{cells}}"
+            wx:key="key"
+            class="cal-cell {{item.empty ? 'cal-cell--empty' : ''}} {{item.checkedIn ? 'cal-cell--on' : ''}} {{item.today ? 'cal-cell--today' : ''}}"
+          >{{item.empty ? '' : item.day}}</view>
+        </view>
+      </view>
+
+      <!-- Credit Hero 榜入口 -->
+      <view class="list leaderboard-entry" bindtap="onTapLeaderboard">
+        <view class="list__item">
+          <view class="flex-1">
+            <text class="list__label">Credit Hero 榜</text>
+            <view class="t-caption">看看你的 credits 排名</view>
+          </view>
+          <text class="chevron">›</text>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

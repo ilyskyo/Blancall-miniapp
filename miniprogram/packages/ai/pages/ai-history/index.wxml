@@ -1,0 +1,53 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="AI 历史" />
+
+  <view class="page-body">
+    <!-- 训练分析 -->
+    <view class="card section">
+      <view class="row-between">
+        <view class="t-headline">训练分析</view>
+        <view class="t-caption">{{analyses.length}} 条</view>
+      </view>
+      <view wx:if="{{analyses.length > 0}}" class="list">
+        <view wx:for="{{analyses}}" wx:key="at" class="row-item">
+          <view class="flex-1" data-at="{{item.at}}" bindtap="onOpenAnalysis">
+            <view class="list__label ellipsis">{{item.title}}</view>
+            <view class="t-caption">{{item.timeText}}</view>
+            <view class="t-sub ellipsis">{{item.preview}}</view>
+          </view>
+          <view class="icon-btn icon-btn--danger" data-at="{{item.at}}" bindtap="onDeleteAnalysis">删除</view>
+        </view>
+      </view>
+      <view wx:else class="t-sub section-empty">暂无训练分析。在练习结果页使用「AI 训练分析」后会出现在这里。</view>
+    </view>
+
+    <!-- 对话历史 -->
+    <view class="card section">
+      <view class="row-between">
+        <view class="t-headline">对话历史</view>
+        <view class="t-caption">{{sessions.length}} 条</view>
+      </view>
+      <view wx:if="{{sessions.length > 0}}" class="list">
+        <view wx:for="{{sessions}}" wx:key="id" class="row-item">
+          <view class="flex-1" data-id="{{item.id}}" bindtap="onOpenSession">
+            <view class="list__label ellipsis">{{item.title}}</view>
+            <view class="t-caption">{{item.timeText}} · {{item.count}} 条消息</view>
+            <view class="t-sub ellipsis">{{item.preview}}</view>
+          </view>
+          <view class="icon-btn icon-btn--danger" data-id="{{item.id}}" bindtap="onDeleteSession">删除</view>
+        </view>
+      </view>
+      <view wx:else class="t-sub section-empty">暂无对话历史。前往「AI 对话」开始提问。</view>
+    </view>
+  </view>
+
+  <!-- 分析详情浮层 -->
+  <view wx:if="{{detailVisible}}" class="mask" bindtap="onCloseDetail"></view>
+  <view wx:if="{{detailVisible}}" class="sheet detail-sheet">
+    <view class="sheet__title">{{detailTitle}}</view>
+    <scroll-view class="detail-body" scroll-y>
+      <view class="analysis-text">{{detailText}}</view>
+    </scroll-view>
+    <view class="btn btn--primary btn--block" bindtap="onCloseDetail">关闭</view>
+  </view>
+</view>

@@ -1,0 +1,37 @@
+.lock-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.32);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48rpx;
+}
+
+.lock-card {
+  width: 100%;
+  max-width: 600rpx;
+  text-align: center;
+  background: var(--bg);
+}
+
+.lock-icon {
+  font-size: 64rpx;
+  margin-bottom: 12rpx;
+}
+
+.lock-desc {
+  margin: 16rpx 0 32rpx;
+}
+
+.lock-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.lock-ios {
+  margin-top: 20rpx;
+  line-height: 1.4;
+}

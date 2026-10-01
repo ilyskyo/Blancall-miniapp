@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": ".tsbuild",
+    "rootDir": "."
+  },
+  "include": ["core/**/*.ts", "tests/**/*.ts"],
+  "exclude": ["node_modules", ".tsbuild", "pages", "packages", "components", "custom-tab-bar", "app.ts"]
+}

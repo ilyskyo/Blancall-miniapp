@@ -1,0 +1,38 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="帮助" />
+
+  <view class="page-body">
+    <!-- 分区说明（点击标题展开/收起） -->
+    <view class="list sections">
+      <view wx:for="{{sections}}" wx:key="id" class="section">
+        <view class="section__head list__item" data-id="{{item.id}}" bindtap="onToggleSection">
+          <view class="row gap-12">
+            <text class="section__icon">{{item.icon}}</text>
+            <text class="list__label">{{item.title}}</text>
+          </view>
+          <text class="section__arrow">{{openId === item.id ? '︿' : '﹀'}}</text>
+        </view>
+        <view wx:if="{{openId === item.id}}" class="section__body">
+          <view wx:for="{{item.items}}" wx:for-item="p" wx:key="*this" class="section__item">
+            <text class="section__dot">•</text>
+            <text class="t-sub">{{p}}</text>
+          </view>
+          <view wx:if="{{item.actionText}}" class="btn btn--sm section__action" data-action="{{item.action}}" bindtap="onSectionAction">
+            {{item.actionText}}
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 常见问题 -->
+    <view class="t-headline faq-title">常见问题</view>
+    <view class="list">
+      <view wx:for="{{faqs}}" wx:key="q" class="faq">
+        <view class="faq__q t-body">{{item.q}}</view>
+        <view class="t-sub faq__a">{{item.a}}</view>
+      </view>
+    </view>
+
+    <view class="btn btn--block foot-btn" bindtap="onReplayOnboarding">重看使用引导</view>
+  </view>
+</view>

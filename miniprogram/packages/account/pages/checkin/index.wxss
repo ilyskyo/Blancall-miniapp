@@ -1,0 +1,159 @@
+/* 签到页样式（颜色一律走 CSS 变量） */
+
+.checkin-body {
+  padding-bottom: calc(80rpx + env(safe-area-inset-bottom));
+}
+
+.group__title {
+  font-size: 26rpx;
+  color: var(--text-2);
+  font-weight: 600;
+  margin: 36rpx 8rpx 16rpx;
+}
+
+.chevron {
+  color: var(--text-2);
+  font-size: 34rpx;
+  line-height: 1;
+}
+
+.checkin-card {
+  margin-top: 24rpx;
+}
+
+.checkin-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 24rpx;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.stat__num {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.checkin-btn {
+  margin-top: 8rpx;
+}
+
+.reward-text {
+  margin-top: 16rpx;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.milestone {
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid var(--border);
+}
+
+.milestone:last-child {
+  border-bottom: none;
+}
+
+.milestone__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6rpx;
+}
+
+.milestone-note {
+  margin-top: 12rpx;
+  line-height: 1.5;
+}
+
+/* 日历 */
+.cal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+
+.cal-title {
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.cal-nav {
+  width: 64rpx;
+  height: 64rpx;
+  line-height: 60rpx;
+  text-align: center;
+  border-radius: 50%;
+  font-size: 40rpx;
+  color: var(--text-2);
+  background: var(--bg-elev);
+}
+
+.cal-nav--disabled {
+  opacity: 0.35;
+}
+
+.cal-week {
+  display: flex;
+}
+
+.cal-week__item {
+  flex: 1;
+  text-align: center;
+  font-size: 22rpx;
+  color: var(--text-2);
+  padding: 8rpx 0;
+}
+
+.cal-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cal-cell {
+  width: 14.28%;
+  height: 76rpx;
+  line-height: 76rpx;
+  text-align: center;
+  font-size: 26rpx;
+  color: var(--text);
+}
+
+.cal-cell--empty {
+  color: transparent;
+}
+
+/* 已签到：主题色加粗 + 底部圆点 */
+.cal-cell--on {
+  color: var(--accent);
+  font-weight: 700;
+  position: relative;
+}
+
+.cal-cell--on::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 10rpx;
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translateX(-50%);
+}
+
+/* 今日：描边 */
+.cal-cell--today {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.leaderboard-entry {
+  margin-top: 32rpx;
+}

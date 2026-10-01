@@ -1,0 +1,89 @@
+.summary {
+  display: flex;
+  align-items: center;
+  gap: 32rpx;
+}
+
+.summary__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.ring {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring__inner {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring__value {
+  font-size: 44rpx;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  gap: 16rpx;
+  margin: 24rpx 0;
+}
+
+.analysis-card {
+  margin-bottom: 24rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.analysis-text {
+  white-space: pre-wrap;
+  font-size: 28rpx;
+  line-height: 1.7;
+}
+
+.blank-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid var(--border);
+}
+
+.blank-row:last-child {
+  border-bottom: none;
+}
+
+.blank-row__index {
+  width: 48rpx;
+  color: var(--text-2);
+  font-size: 24rpx;
+}
+
+.ok {
+  color: var(--success);
+}
+
+.bad {
+  color: var(--danger);
+}
+
+.share-canvas {
+  position: fixed;
+  left: -9999rpx;
+  top: 0;
+  width: 1080px;
+  height: 1440px;
+}

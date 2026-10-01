@@ -1,0 +1,397 @@
+﻿/* 数据总览样式（颜色一律走 CSS 变量） */
+
+.group__title {
+  font-size: 26rpx;
+  color: var(--text-2);
+  font-weight: 600;
+  margin: 36rpx 8rpx 16rpx;
+}
+
+/* 顶部入口 */
+.entry-row {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 16rpx;
+}
+
+.entry {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+  padding: 22rpx 8rpx;
+}
+
+.entry__icon {
+  font-size: 42rpx;
+}
+
+.entry__title {
+  font-size: 24rpx;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* 正确率环 */
+.ring-wrap {
+  display: flex;
+  align-items: center;
+  gap: 32rpx;
+}
+
+.ring {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 50%;
+  position: relative;
+  flex: none;
+}
+
+.ring__hole {
+  position: absolute;
+  top: 28rpx;
+  left: 28rpx;
+  right: 28rpx;
+  bottom: 28rpx;
+  border-radius: 50%;
+  background: var(--bg-elev);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring__value {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.metrics {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+  padding: 12rpx 0;
+  width: 50%;
+}
+
+.metric__value {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.metric-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.metric-grid .metric {
+  width: 33.33%;
+}
+
+.kv-row {
+  padding: 10rpx 0;
+}
+
+.kv-row__value {
+  font-size: 28rpx;
+}
+
+.goal-progress {
+  height: 12rpx;
+  margin: 20rpx 0 12rpx;
+}
+
+/* 趋势柱状 */
+.trend {
+  display: flex;
+  align-items: flex-end;
+  gap: 6rpx;
+  height: 220rpx;
+}
+
+.trend__col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.trend__track {
+  width: 100%;
+  height: 150rpx;
+  display: flex;
+  align-items: flex-end;
+}
+
+.trend__bar {
+  width: 100%;
+  min-height: 4rpx;
+  background: var(--accent);
+  border-radius: 6rpx 6rpx 0 0;
+}
+
+.trend__count {
+  font-size: 18rpx;
+  color: var(--text-2);
+  height: 24rpx;
+}
+
+.trend__label {
+  font-size: 16rpx;
+  color: var(--text-2);
+}
+
+/* 日历 */
+.cal {
+  display: flex;
+  gap: 6rpx;
+}
+
+.cal__col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.cal__cell {
+  width: 100%;
+  height: 24rpx;
+  border-radius: 4rpx;
+  background: var(--border);
+}
+
+.cal__cell--blank {
+  background: transparent;
+}
+
+.cal__l0 {
+  background: var(--border);
+}
+
+.cal__l1 {
+  background: var(--accent);
+  opacity: 0.25;
+}
+
+.cal__l2 {
+  background: var(--accent);
+  opacity: 0.5;
+}
+
+.cal__l3 {
+  background: var(--accent);
+  opacity: 0.75;
+}
+
+.cal__l4 {
+  background: var(--accent);
+  opacity: 1;
+}
+
+.cal-legend {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-top: 20rpx;
+  justify-content: flex-end;
+}
+
+.cal-legend .cal__cell {
+  width: 24rpx;
+  flex: none;
+}
+
+/* 雷达 */
+.radar {
+  display: block;
+  width: 100%;
+  height: 420rpx;
+  margin-top: 16rpx;
+}
+
+.canvas-empty {
+  padding: 60rpx 0;
+  text-align: center;
+}
+
+/* 条形对比 */
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 12rpx 0;
+}
+
+.bar-row__label {
+  width: 120rpx;
+  flex: none;
+  font-size: 24rpx;
+  color: var(--text-2);
+}
+
+.bar-row__track {
+  flex: 1;
+  height: 16rpx;
+  background: var(--border);
+  border-radius: 999rpx;
+  overflow: hidden;
+}
+
+.bar-row__fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999rpx;
+}
+
+.bar-row__fill--warn {
+  background: var(--warning);
+}
+
+.bar-row__value {
+  width: 210rpx;
+  flex: none;
+  text-align: right;
+  font-size: 23rpx;
+  color: var(--text-2);
+}
+
+/* 成就 */
+.ach-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.ach {
+  width: calc((100% - 32rpx) / 3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+  padding: 20rpx 8rpx;
+  border-radius: 20rpx;
+  background: var(--accent-soft);
+}
+
+.ach--locked {
+  background: transparent;
+  border: 1rpx solid var(--border);
+  opacity: 0.5;
+}
+
+.ach__icon {
+  font-size: 44rpx;
+}
+
+.ach__title {
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.ach__progress {
+  width: 80%;
+  height: 8rpx;
+  background: var(--border);
+  border-radius: 999rpx;
+  overflow: hidden;
+}
+
+.ach__progress-bar {
+  height: 100%;
+  background: var(--accent);
+}
+
+/* 标签 */
+.tag-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10rpx;
+  height: 56rpx;
+  padding: 0 22rpx;
+  border-radius: 999rpx;
+  font-size: 24rpx;
+  background: var(--bg-elev);
+  border-left: 6rpx solid var(--accent);
+}
+
+.tag__count {
+  color: var(--text-2);
+  font-size: 22rpx;
+}
+
+.tag-c0 {
+  border-left-color: var(--accent);
+}
+
+.tag-c1 {
+  border-left-color: var(--success);
+}
+
+.tag-c2 {
+  border-left-color: var(--danger);
+}
+
+.tag-c3 {
+  border-left-color: var(--warning);
+}
+
+.tag-c4 {
+  border-left-color: var(--text-2);
+}
+
+.tag-c5 {
+  border-left-color: var(--text);
+}
+
+/* 紧急度标签 */
+.chip.u-overdue {
+  background: var(--danger);
+  color: var(--on-accent);
+}
+
+.chip.u-today {
+  background: var(--warning);
+  color: var(--on-accent);
+}
+
+.chip.u-soon {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* 进步趋势 */
+.trend-up {
+  color: var(--success);
+}
+
+.trend-down {
+  color: var(--danger);
+}
+
+.trend-flat {
+  color: var(--text-2);
+}
+
+.analysis-body {
+  display: block;
+  margin: 12rpx 0;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}

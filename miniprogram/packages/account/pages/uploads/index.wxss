@@ -1,0 +1,81 @@
+/* 我的云端资料样式（颜色一律走 CSS 变量） */
+
+.uploads-body {
+  padding-bottom: calc(80rpx + env(safe-area-inset-bottom));
+}
+
+.hint-card {
+  margin-top: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.hint-text {
+  font-size: 26rpx;
+  color: var(--warning);
+  flex: 1;
+}
+
+.hint-link {
+  font-size: 26rpx;
+  color: var(--accent);
+}
+
+.docs-list {
+  margin-top: 24rpx;
+}
+
+.doc-item {
+  padding: 24rpx 28rpx;
+  border-bottom: 1rpx solid var(--border);
+}
+
+.doc-item:last-child {
+  border-bottom: none;
+}
+
+.doc-name {
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.doc-meta {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-top: 8rpx;
+}
+
+.doc-status {
+  font-size: 22rpx;
+  padding: 2rpx 14rpx;
+  border-radius: 999rpx;
+  background: var(--bg-elev);
+  border: 1rpx solid var(--border);
+}
+
+.doc-status--ok {
+  color: var(--success);
+}
+
+.doc-status--fail {
+  color: var(--danger);
+}
+
+.doc-status--muted {
+  color: var(--text-2);
+}
+
+.doc-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 18rpx;
+}
+
+.privacy-note {
+  margin-top: 32rpx;
+  text-align: center;
+  line-height: 1.5;
+}

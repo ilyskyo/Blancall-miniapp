@@ -1,0 +1,50 @@
+/* 我的字体样式（颜色一律走 CSS 变量） */
+
+.fonts-body {
+  padding-bottom: calc(80rpx + env(safe-area-inset-bottom));
+}
+
+.group__title {
+  font-size: 26rpx;
+  color: var(--text-2);
+  font-weight: 600;
+  margin: 36rpx 8rpx 16rpx;
+}
+
+.copyright-card {
+  margin-top: 24rpx;
+}
+
+.copyright-desc {
+  margin-top: 8rpx;
+  line-height: 1.5;
+}
+
+.preview-card {
+  margin-top: 0;
+}
+
+.preview-text {
+  font-size: 34rpx;
+  line-height: 1.7;
+}
+
+.font-item {
+  padding: 24rpx 28rpx;
+  border-bottom: 1rpx solid var(--border);
+}
+
+.font-item:last-child {
+  border-bottom: none;
+}
+
+.font-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  align-items: flex-end;
+}
+
+.upload-wrap {
+  margin: 40rpx 0 16rpx;
+}

@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "nav-bar": "/components/nav-bar/nav-bar",
+    "lock-mask": "/components/lock-mask/lock-mask"
+  },
+  "enableShareAppMessage": true,
+  "enableShareTimeline": true
+}

@@ -1,0 +1,20 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="{{title}}" />
+
+  <view class="page-body agreement-body">
+    <view class="t-caption updated">更新日期：{{updatedAt}}</view>
+
+    <view wx:for="{{sections}}" wx:key="heading" class="section">
+      <view class="section__heading">{{item.heading}}</view>
+      <view class="section__body">
+        <view wx:for="{{item.paragraphs}}" wx:for-item="p" wx:key="*this" class="paragraph">{{p}}</view>
+      </view>
+    </view>
+
+    <view class="contact" bindtap="onCopyEmail">
+      <text class="t-caption">联系方式：{{contactEmail}}（点击复制）</text>
+    </view>
+  </view>
+</view>
+
+<privacy-popup />

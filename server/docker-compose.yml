@@ -1,0 +1,91 @@
+# Blancall 小程序后端 · 本地/单机部署编排
+# 组成：api（NestJS） + postgres（数据库） + minio（S3 兼容对象存储） + nginx（HTTPS 反向代理）
+#
+# 使用：
+#   1) cp .env.example .env 并按需修改（务必修改 POSTGRES_PASSWORD / MINIO_ROOT_PASSWORD / STORAGE_URL_SECRET）
+#   2) docker compose up -d --build
+#   3) docker compose logs -f api
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: blancall-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-blancall}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-blancall}
+      POSTGRES_DB: ${POSTGRES_DB:-blancall}
+      TZ: Asia/Shanghai
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-blancall} -d ${POSTGRES_DB:-blancall}']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    # 生产环境建议不对外暴露端口，仅容器网络内访问
+    ports:
+      - '127.0.0.1:5432:5432'
+
+  minio:
+    image: minio/minio:latest
+    container_name: blancall-minio
+    restart: unless-stopped
+    command: server /data --console-address ':9001'
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    volumes:
+      - minio:/data
+    ports:
+      - '9000:9000' # S3 API
+      - '9001:9001' # 控制台
+    healthcheck:
+      test: ['CMD', 'mc', 'ready', 'local']
+      interval: 15s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blancall-api
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # 容器内数据库地址（覆盖 .env 中的本机地址）
+      DATABASE_URL: postgresql://${POSTGRES_USER:-blancall}:${POSTGRES_PASSWORD:-blancall}@postgres:5432/${POSTGRES_DB:-blancall}?schema=public
+      # 使用 MinIO 作为对象存储（如改用云 COS/OSS，请改回 STORAGE_DRIVER=s3 并填写对应 Endpoint）
+      STORAGE_DRIVER: ${STORAGE_DRIVER:-local}
+      STORAGE_LOCAL_DIR: /data/storage
+      TZ: Asia/Shanghai
+    volumes:
+      - storage:/data/storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # 启动时自动执行迁移与 SKU 初始化（幂等）
+    command: sh -c "npx prisma db push --skip-generate && node dist/main.js"
+    ports:
+      - '127.0.0.1:3000:3000'
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: blancall-nginx
+    restart: unless-stopped
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # 证书目录：放置 fullchain.pem / privkey.pem
+      - ./certs:/etc/nginx/certs:ro
+    ports:
+      - '80:80'
+      - '443:443'
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
+  minio:
+  storage:

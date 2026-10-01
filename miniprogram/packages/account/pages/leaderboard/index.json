@@ -1,0 +1,8 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "nav-bar": "/components/nav-bar/nav-bar",
+    "glass-switch": "/components/glass-switch/glass-switch",
+    "empty-state": "/components/empty-state/empty-state"
+  }
+}

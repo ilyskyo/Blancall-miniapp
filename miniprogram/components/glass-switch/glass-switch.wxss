@@ -1,0 +1,33 @@
+/* iOS 风格自绘开关（轨迹 51x31dp、纯白滑块 27dp、无描边/无渐变） */
+:host {
+  display: inline-block;
+}
+
+.switch {
+  width: 102rpx;
+  height: 62rpx;
+  border-radius: 999rpx;
+  background: #e5e5ea;
+  position: relative;
+  transition: background 0.22s ease;
+}
+
+.switch--on {
+  background: var(--accent);
+}
+
+.switch__knob {
+  position: absolute;
+  top: 4rpx;
+  left: 4rpx;
+  width: 54rpx;
+  height: 54rpx;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.18);
+  transition: transform 0.22s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.switch--on .switch__knob {
+  transform: translateX(40rpx);
+}

@@ -1,0 +1,41 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="自定义挖空编辑" rightText="保存" bind:righttap="onSave" />
+
+  <view class="page-body">
+    <view class="card name-card">
+      <view class="t-sub">配置名称</view>
+      <input class="editor-input" value="{{name}}" placeholder="配置名称" maxlength="20" bindinput="onNameInput" />
+      <view class="t-caption">点击字符设起点、再点一次设终点即可挖空；长按可把分句按 句→词→字 循环拆解；点击已挖空处可取消。</view>
+    </view>
+
+
+    <scroll-view class="content" scroll-y>
+      <view class="sentence" wx:for="{{sentences}}" wx:key="si" wx:for-item="sentence">
+        <text
+          wx:for="{{sentence.chars}}"
+          wx:key="ci"
+          wx:for-item="ch"
+          class="char {{ch.cls}}"
+          data-si="{{sentence.si}}"
+          data-ci="{{ch.ci}}"
+          bindtap="onTapChar"
+          bindlongpress="onLongPress"
+        >{{ch.ch}}</text>
+      </view>
+      <view wx:if="{{sentences.length === 0}}" class="empty">文章内容为空</view>
+    </scroll-view>
+  </view>
+
+  <!-- 工具条 -->
+  <view class="toolbar">
+    <view class="toolbar__info">{{blankCount}} 空 · {{dirtyText}}</view>
+    <view class="toolbar__btns">
+      <view class="tb-btn {{canUndo ? '' : 'tb-btn--off'}}" bindtap="onUndo">撤销</view>
+      <view class="tb-btn {{canRedo ? '' : 'tb-btn--off'}}" bindtap="onRedo">重做</view>
+      <view class="tb-btn" bindtap="onClear">清空</view>
+      <view class="tb-btn" bindtap="onSelectAll">按句全选</view>
+      <view class="tb-btn tb-btn--primary" bindtap="onSave">保存</view>
+    </view>
+  </view>
+
+</view>

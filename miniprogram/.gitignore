@@ -1,0 +1,16 @@
+# 依赖与构建产物
+node_modules/
+.tsbuild/
+dist/
+build/
+*.log
+
+# 本地配置（含 AppID / 域名 / 密钥，不入库）
+project.private.config.json
+.env
+.env.local
+.env.production
+
+# 微信开发者工具
+.DS_Store
+Thumbs.db

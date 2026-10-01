@@ -1,0 +1,130 @@
+/* 账户中心样式（颜色一律走 CSS 变量） */
+
+.account-body {
+  padding-bottom: calc(80rpx + env(safe-area-inset-bottom));
+}
+
+.group__title {
+  font-size: 26rpx;
+  color: var(--text-2);
+  font-weight: 600;
+  margin: 36rpx 8rpx 16rpx;
+}
+
+.chevron {
+  color: var(--text-2);
+  font-size: 34rpx;
+  line-height: 1;
+}
+
+.item-desc {
+  margin-top: 6rpx;
+}
+
+/* 登录卡片 */
+.login-card {
+  margin-top: 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  text-align: center;
+}
+
+.login-emoji {
+  font-size: 72rpx;
+  line-height: 1;
+}
+
+.login-desc {
+  line-height: 1.5;
+}
+
+.login-btn {
+  margin-top: 8rpx;
+}
+
+.login-guest {
+  margin-top: 8rpx;
+  line-height: 1.5;
+}
+
+/* 资料卡 */
+.profile {
+  margin-top: 24rpx;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.avatar-btn {
+  width: 160rpx;
+  flex: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  line-height: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.avatar-btn::after {
+  border: none;
+}
+
+.avatar {
+  width: 132rpx;
+  height: 132rpx;
+  border-radius: 50%;
+  background: var(--bg-elev);
+}
+
+.avatar--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 52rpx;
+  color: var(--text-2);
+  border: 1rpx solid var(--border);
+}
+
+.avatar-edit {
+  font-size: 22rpx;
+}
+
+.profile-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.nickname-input {
+  height: 72rpx;
+  padding: 0 20rpx;
+  border-radius: 18rpx;
+  background: var(--bg-elev);
+  border: 1rpx solid var(--border);
+  color: var(--text);
+  font-size: 32rpx;
+}
+
+.rank-card {
+  margin-top: 24rpx;
+}
+
+.logout-wrap {
+  margin: 48rpx 0 16rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.danger-note {
+  text-align: center;
+  line-height: 1.5;
+}

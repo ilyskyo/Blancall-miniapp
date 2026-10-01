@@ -1,0 +1,90 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="账户中心" />
+
+  <view class="page-body account-body">
+    <!-- 未登录 -->
+    <view wx:if="{{!loggedIn}}" class="glass-card login-card">
+      <view class="login-emoji">🔐</view>
+      <view class="t-headline">登录后解锁云能力</view>
+      <view class="t-sub login-desc">登录后可云同步学习数据、上传文档与字体，并使用 AI、签到与排行榜。</view>
+      <view class="btn btn--primary btn--block login-btn" bindtap="onLogin">微信一键登录</view>
+      <view class="t-caption login-guest">
+        未登录也能使用全部本地功能：导入（TXT/MD）、练习、统计、阅读与素材库，数据仅保存在本机。
+      </view>
+    </view>
+
+    <!-- 已登录 -->
+    <block wx:if="{{loggedIn}}">
+      <view class="glass-card profile">
+        <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+          <image wx:if="{{avatar}}" class="avatar" src="{{avatar}}" mode="aspectFill" />
+          <view wx:else class="avatar avatar--placeholder">{{avatarText}}</view>
+          <view class="avatar-edit t-caption">更换头像</view>
+        </button>
+        <view class="profile-main">
+          <input class="nickname-input" type="nickname" value="{{nickname}}" placeholder="点击填写昵称" bindblur="onNicknameChange" />
+          <view class="t-caption">头像与昵称仅用于展示，可随时修改</view>
+        </view>
+      </view>
+
+      <view class="list rank-card">
+        <view class="list__item">
+          <view class="flex-1">
+            <text class="list__label">排行榜展示昵称</text>
+            <view class="t-caption item-desc">关闭后上榜仅显示为「用户****」</view>
+          </view>
+          <glass-switch checked="{{rankVisible}}" bind:change="onToggleRank" />
+        </view>
+      </view>
+
+      <view class="group__title">云能力</view>
+      <view class="list">
+        <view class="list__item" bindtap="onTapUploads">
+          <text class="list__label">我的云端资料</text>
+          <text class="chevron">›</text>
+        </view>
+        <view class="list__item" bindtap="onTapFonts">
+          <text class="list__label">我的字体</text>
+          <text class="chevron">›</text>
+        </view>
+        <view class="list__item" bindtap="onTapSpace">
+          <text class="list__label">我的空间</text>
+          <view class="list__value">
+            <text>{{spaceText}}</text>
+            <text class="chevron">›</text>
+          </view>
+        </view>
+        <view class="list__item" bindtap="onTapOrders">
+          <text class="list__label">我的订单</text>
+          <text class="chevron">›</text>
+        </view>
+      </view>
+
+      <view class="group__title">学习激励</view>
+      <view class="list">
+        <view class="list__item" bindtap="onTapCheckin">
+          <text class="list__label">每日签到</text>
+          <view class="list__value">
+            <text>已连续 {{streak}} 天</text>
+            <text class="chevron">›</text>
+          </view>
+        </view>
+        <view class="list__item" bindtap="onTapLeaderboard">
+          <text class="list__label">排行榜</text>
+          <view class="list__value">
+            <text>{{credits}} credits</text>
+            <text class="chevron">›</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="logout-wrap">
+        <view class="btn btn--block btn--ghost" bindtap="onLogout">退出登录</view>
+        <view class="btn btn--block btn--danger" bindtap="onDeleteAccount">注销账号</view>
+      </view>
+      <view class="t-caption danger-note">注销将永久删除云端账号与数据，且不可恢复。</view>
+    </block>
+  </view>
+</view>
+
+<privacy-popup />

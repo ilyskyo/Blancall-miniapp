@@ -1,0 +1,207 @@
+<!-- 正文片段渲染模板：遮挡块点击揭示/遮回，普通片段点击切换控件 -->
+<template name="secTpl">
+  <view class="sec">
+    <view wx:for="{{sec.paras}}" wx:for-item="para" wx:for-index="pIdx" wx:key="k" class="para">
+      <text
+        wx:for="{{para.segs}}"
+        wx:for-item="seg"
+        wx:for-index="gIdx"
+        wx:key="k"
+        class="seg{{seg.occluded ? ' seg--mask mask-c' + seg.colorIndex : ''}}{{seg.revealed ? ' seg--revealed' : ''}}"
+        data-si="{{sIdx}}"
+        data-pi="{{pIdx}}"
+        data-gi="{{gIdx}}"
+        catchtap="onSegTap"
+      >{{seg.text}}</text>
+    </view>
+  </view>
+</template>
+
+<view class="page reader-page" style="{{themeStyle}}">
+  <!-- 顶部细进度条 -->
+  <view class="reader-progress">
+    <view class="reader-progress__bar" style="width:{{progressPercent}}%"></view>
+  </view>
+
+  <!-- 顶部液态玻璃降级栏 -->
+  <view wx:if="{{controlsVisible}}" class="reader-bar">
+    <view class="reader-bar__inner" style="padding-top:{{statusBarHeight}}px">
+      <view class="reader-bar__back" bindtap="onBack">‹</view>
+      <view class="reader-bar__title ellipsis">{{title}}</view>
+      <view class="reader-bar__aa" catchtap="onOpenPanel">Aa</view>
+    </view>
+    <view class="reader-bar__meta">
+      <text>第 {{sectionText}} 节</text>
+      <text>{{percentText}}</text>
+      <text>累计 {{elapsedText}}</text>
+    </view>
+  </view>
+
+  <!-- 正文：滚动模式 -->
+  <scroll-view
+    wx:if="{{!pageMode}}"
+    class="reader-scroll"
+    scroll-y
+    scroll-into-view="{{scrollIntoId}}"
+    bindscroll="onScroll"
+    style="padding-top:{{contentPadTop}}px; background:{{readingBg}}"
+  >
+    <view id="readerContent" class="reader-content {{indent ? 'reader-content--indent' : ''}}" style="{{contentStyle}}">
+      <block wx:for="{{sections}}" wx:for-item="sec" wx:for-index="sIdx" wx:key="index">
+        <view id="sec{{sec.index}}">
+          <template is="secTpl" data="{{sec, sIdx}}" />
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+
+  <!-- 正文：翻页模式 -->
+  <view
+    wx:else
+    class="reader-page-area"
+    style="padding-top:{{contentPadTop}}px; background:{{readingBg}}"
+    bindtouchstart="onTouchStart"
+    bindtouchend="onTouchEnd"
+  >
+    <view class="reader-content {{indent ? 'reader-content--indent' : ''}}" style="{{contentStyle}}">
+      <template wx:if="{{currentSection}}" is="secTpl" data="{{sec: currentSection, sIdx: currentIndex}}" />
+    </view>
+  </view>
+
+  <!-- 排版 / 遮挡设置面板 -->
+  <view wx:if="{{panelVisible}}" class="mask" bindtap="onClosePanel"></view>
+  <view wx:if="{{panelVisible}}" class="sheet reader-sheet">
+    <view class="row-between">
+      <text class="sheet__title">阅读设置</text>
+      <view class="btn btn--sm btn--ghost" bindtap="onClosePanel">完成</view>
+    </view>
+
+    <!-- 布局 -->
+    <view class="sheet__row">
+      <text class="t-sub">布局</text>
+      <view class="seg seg--sm">
+        <view
+          wx:for="{{layoutOptions}}"
+          wx:key="value"
+          class="seg__item {{layoutMode === item.value ? 'seg__item--active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onSelectLayout"
+        >{{item.label}}</view>
+      </view>
+    </view>
+
+    <!-- 字号 -->
+    <view class="sheet__row">
+      <text class="t-sub">字号 {{fontPx}}</text>
+      <slider
+        class="flex-1"
+        min="14"
+        max="24"
+        step="1"
+        value="{{fontPx}}"
+        activeColor="{{accentHex}}"
+        block-size="20"
+        bindchanging="onFontSizeChanging"
+        bindchange="onFontSizeChange"
+      />
+    </view>
+
+    <!-- 行距 -->
+    <view class="sheet__row">
+      <text class="t-sub">行距 {{lineHeight}}</text>
+      <slider
+        class="flex-1"
+        min="1.4"
+        max="2.4"
+        step="0.1"
+        value="{{lineHeight}}"
+        activeColor="{{accentHex}}"
+        block-size="20"
+        bindchanging="onLineHeightChanging"
+        bindchange="onLineHeightChange"
+      />
+    </view>
+
+    <!-- 背景 -->
+    <view class="sheet__row sheet__row--col">
+      <text class="t-sub">背景</text>
+      <view class="opts">
+        <view
+          wx:for="{{bgOptions}}"
+          wx:key="value"
+          class="opt {{bgMode === item.value ? 'opt--active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onSelectBg"
+        >{{item.label}}</view>
+      </view>
+    </view>
+
+    <!-- 字体 -->
+    <view class="sheet__row sheet__row--col">
+      <text class="t-sub">字体</text>
+      <view class="opts">
+        <view
+          wx:for="{{fontOptions}}"
+          wx:key="id"
+          class="opt {{fontId === item.id ? 'opt--active' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="onSelectFont"
+        >{{item.name}}</view>
+      </view>
+    </view>
+
+    <!-- 字重 -->
+    <view class="sheet__row sheet__row--col">
+      <text class="t-sub">字重</text>
+      <view class="opts">
+        <view
+          wx:for="{{fontWeights}}"
+          wx:key="value"
+          class="opt {{fontWeight === item.value ? 'opt--active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onSelectWeight"
+        >{{item.label}}</view>
+      </view>
+    </view>
+
+    <view class="divider"></view>
+
+    <!-- 背诵遮挡 -->
+    <view class="sheet__row">
+      <view class="flex-1">
+        <text class="list__label">背诵遮挡</text>
+      </view>
+      <view class="switch {{occlusionEnabled ? 'switch--on' : ''}}" bindtap="onToggleOcclusion">
+        <view class="switch__knob"></view>
+      </view>
+    </view>
+
+    <view wx:if="{{occlusionEnabled}}" class="sheet__row sheet__row--col">
+      <text class="t-sub">遮挡粒度</text>
+      <view class="opts">
+        <view
+          wx:for="{{occlusionModes}}"
+          wx:key="value"
+          class="opt {{occlusionMode === item.value ? 'opt--active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onSelectOcclusionMode"
+        >{{item.label}}</view>
+        <view
+          class="opt {{occlusionMode === 'custom' ? 'opt--active' : ''}}"
+          data-value="custom"
+          bindtap="onSelectOcclusionMode"
+        >自定义</view>
+      </view>
+    </view>
+
+    <view wx:if="{{occlusionEnabled && occlusionMode === 'custom'}}" class="sheet__row sheet__row--col">
+      <picker range="{{maskConfigNames}}" value="{{maskConfigIndex}}" bindchange="onPickMaskConfig">
+        <view class="list__value">
+          <text class="setting-value">{{maskConfigText}}</text>
+          <text class="chevron">›</text>
+        </view>
+      </picker>
+      <view class="btn btn--sm btn--ghost" bindtap="onGoMaskConfig">管理遮挡配置</view>
+    </view>
+  </view>
+</view>

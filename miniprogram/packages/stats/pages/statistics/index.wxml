@@ -1,0 +1,131 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="单篇统计" />
+
+  <view class="page-body stats-body">
+    <view class="t-headline article-title">{{title}}</view>
+
+    <block wx:if="{{notFound}}">
+      <empty-state icon="⚠️" text="未找到该文章" />
+    </block>
+
+    <block wx:else>
+      <!-- 总览 -->
+      <view class="overview-grid">
+        <view wx:for="{{overview}}" wx:key="label" class="card overview-cell">
+          <view class="overview-value">{{item.value}}</view>
+          <view class="t-caption">{{item.label}}</view>
+        </view>
+      </view>
+
+      <block wx:if="{{!hasData}}">
+        <empty-state icon="📊" text="该文章还没有练习记录" actionText="去练习" bind:action="onTapPractice" />
+      </block>
+
+      <block wx:else>
+        <!-- 趋势 -->
+        <view class="group__title">近 14 天趋势</view>
+        <view class="card">
+          <view class="trend">
+            <view wx:for="{{trend}}" wx:key="date" class="trend__col">
+              <view class="trend__bar-wrap">
+                <view class="trend__bar" style="height:{{item.heightPercent}}%"></view>
+              </view>
+              <text class="trend__label">{{item.label}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 模式对比 -->
+        <view class="group__title">模式对比</view>
+        <view class="card">
+          <view wx:for="{{modes}}" wx:key="mode" class="mode-row">
+            <view class="row-between">
+              <text class="list__label">{{item.label}}</text>
+              <text class="t-caption">{{item.count}} 次 · {{item.accuracyText}}</text>
+            </view>
+            <view class="progress mode-bar">
+              <view class="progress__bar" style="width:{{item.accuracyPercent}}%"></view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 薄弱环节 -->
+        <view class="group__title">薄弱环节</view>
+        <view class="card">
+          <view wx:if="{{weakness.length === 0}}" class="t-sub">暂无错题，继续保持</view>
+          <view wx:else class="weakness-wrap">
+            <view wx:for="{{weakness}}" wx:key="label" class="weakness-chip">
+              <text class="weakness-label">{{item.label}}</text>
+              <text class="weakness-count">{{item.count}} 次 · {{item.ratioText}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 记忆热力图 -->
+        <view class="group__title">记忆热力图（按句）</view>
+        <view class="card">
+          <view class="t-caption heat-overall">整体错误率 {{heatOverall}}</view>
+          <view class="legend">
+            <view wx:for="{{legend}}" wx:key="label" class="legend-item">
+              <view class="legend-dot" style="background:{{item.color}}"></view>
+              <text class="t-caption">{{item.label}}</text>
+            </view>
+            <view class="legend-item">
+              <view class="legend-dot legend-dot--none"></view>
+              <text class="t-caption">未练习</text>
+            </view>
+          </view>
+          <view class="heat-wrap">
+            <view
+              wx:for="{{heat}}"
+              wx:key="key"
+              class="heat-cell {{item.color ? '' : 'heat-cell--none'}}"
+              style="{{item.bgStyle}}"
+            >
+              <text class="heat-cell__text">{{item.text}}</text>
+              <text wx:if="{{item.color}}" class="heat-cell__pct">{{item.errorText}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 练习历史 -->
+        <view class="group__title">练习历史</view>
+        <view class="seg">
+          <view
+            wx:for="{{filterLabels}}"
+            wx:key="*this"
+            class="seg__item {{filterIndex === index ? 'seg__item--active' : ''}}"
+            data-index="{{index}}"
+            bindtap="onFilter"
+          >{{item}}</view>
+        </view>
+        <view wx:if="{{history.length === 0}}" class="empty">
+          <view class="t-sub">该筛选下暂无记录</view>
+        </view>
+        <view wx:else class="list">
+          <view wx:for="{{history}}" wx:key="uuid" class="history-item">
+            <view class="history-head" data-uuid="{{item.uuid}}" bindtap="onToggleRow">
+              <view class="flex-1">
+                <text class="list__label">{{item.modeLabel}} · {{item.accuracyText}}</text>
+                <view class="t-caption">{{item.timeText}} · 正确 {{item.correctText}} · 用时 {{item.durationText}} · 错题 {{item.mistakeCount}}</view>
+              </view>
+              <text class="chevron">{{item.expanded ? '⌃' : '⌄'}}</text>
+            </view>
+            <view wx:if="{{item.expanded}}" class="history-detail">
+              <view wx:if="{{item.mistakes.length === 0}}" class="t-caption">本次无错题</view>
+              <view wx:else>
+                <view wx:for="{{item.mistakes}}" wx:for-item="m" wx:key="index" class="mistake-row">
+                  <text class="t-caption mistake-idx">#{{m.index}}</text>
+                  <text class="t-caption mistake-wrong">{{m.user}}</text>
+                  <text class="t-caption mistake-arrow">→</text>
+                  <text class="t-caption mistake-right">{{m.correct}}</text>
+                  <text class="chip chip--muted mistake-tag">{{m.label}}</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+    </block>
+  </view>
+</view>

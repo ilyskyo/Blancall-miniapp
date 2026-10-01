@@ -1,0 +1,280 @@
+<view class="page" style="{{themeStyle}}">
+  <nav-bar title="设置" showBack="{{true}}" />
+
+  <view class="page-body settings-body">
+    <!-- ============ 外观 ============ -->
+    <view class="group__title">外观</view>
+    <view class="card">
+      <view class="setting-row">
+        <text class="list__label">主题</text>
+      </view>
+      <view class="seg">
+        <view
+          wx:for="{{themeOptions}}"
+          wx:key="value"
+          class="seg__item {{themeMode === item.value ? 'seg__item--active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onSelectTheme"
+        >{{item.label}}</view>
+      </view>
+
+      <view class="divider"></view>
+
+      <view class="setting-row">
+        <text class="list__label">浅色背景</text>
+      </view>
+      <view class="seg">
+        <view
+          wx:for="{{bgOptions}}"
+          wx:key="value"
+          class="seg__item {{lightBackground === item.value ? 'seg__item--active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onSelectBg"
+        >{{item.label}}</view>
+      </view>
+
+      <view class="divider"></view>
+
+      <view class="setting-row">
+        <text class="list__label">主题色</text>
+      </view>
+      <view class="accents">
+        <view
+          wx:for="{{accentPresets}}"
+          wx:key="name"
+          class="accent {{accentColor === index ? 'accent--active' : ''}}"
+          data-index="{{index}}"
+          bindtap="onSelectAccent"
+        >
+          <view class="accent__dot" style="background:{{item.color}}"></view>
+          <text class="t-caption">{{item.name}}</text>
+        </view>
+      </view>
+
+      <view class="divider"></view>
+
+      <view class="setting-row">
+        <text class="list__label">导航栏玻璃效果</text>
+        <glass-switch checked="{{navLiquidGlass}}" bind:change="onToggleNavGlass" />
+      </view>
+
+      <view class="setting-row" bindtap="onEditSubtitle">
+        <text class="list__label">首页副标题</text>
+        <view class="list__value">
+          <text class="ellipsis setting-value">{{subtitle || '未设置'}}</text>
+          <text class="chevron">›</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ============ 特性 ============ -->
+    <view class="group__title">特性</view>
+    <view class="card">
+      <view class="setting-row">
+        <text class="list__label">自动首行缩进</text>
+        <glass-switch checked="{{autoIndentEnabled}}" bind:change="onToggleAutoIndent" />
+      </view>
+      <view class="setting-row">
+        <text class="list__label">关闭返回须知</text>
+        <glass-switch checked="{{backWarningDisabled}}" bind:change="onToggleBackWarning" />
+      </view>
+      <view class="setting-row">
+        <text class="list__label">显示提示</text>
+        <glass-switch checked="{{showHint}}" bind:change="onToggleShowHint" />
+      </view>
+      <view class="setting-row">
+        <view class="flex-1">
+          <text class="list__label">AI 挖空</text>
+          <view class="t-caption setting-desc">AI 挖空未上线，开启后生成时自动回退本地算法</view>
+        </view>
+        <view class="switch {{useAiCloze ? 'switch--on' : ''}}" bindtap="onToggleAiCloze">
+          <view class="switch__knob"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ============ AI ============ -->
+    <view class="group__title">AI</view>
+    <view class="card">
+      <view class="setting-row" bindtap="onOpenAiChat">
+        <view class="flex-1">
+          <text class="list__label">AI 对话</text>
+          <view class="t-caption setting-desc">可结合文章上下文提问（AI 未上线，敬请期待）</view>
+        </view>
+        <text class="chevron">›</text>
+      </view>
+      <view class="setting-row" bindtap="onOpenAiHistory">
+        <view class="flex-1">
+          <text class="list__label">AI 历史</text>
+          <view class="t-caption setting-desc">训练分析与历史对话</view>
+        </view>
+        <text class="chevron">›</text>
+      </view>
+    </view>
+
+    <!-- ============ 复习 ============ -->
+    <view class="group__title">复习</view>
+    <view class="card">
+      <view class="setting-row">
+        <text class="list__label">复习模板</text>
+      </view>
+      <view class="seg">
+        <view
+          wx:for="{{templateOptions}}"
+          wx:key="value"
+          class="seg__item {{reviewTemplate === item.value ? 'seg__item--active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onSelectTemplate"
+        >{{item.label}}</view>
+      </view>
+      <view class="setting-row">
+        <view class="flex-1">
+          <text class="list__label">相似度评级</text>
+          <view class="t-caption setting-desc">按默写相似度给出记忆评级（关闭后按正确率）</view>
+        </view>
+        <glass-switch checked="{{useSimilarityRating}}" bind:change="onToggleSimilarity" />
+      </view>
+    </view>
+
+    <!-- ============ 学习提醒 ============ -->
+    <view class="group__title">学习提醒</view>
+    <view class="card">
+      <view class="setting-row">
+        <view class="flex-1">
+          <text class="list__label">开启提醒</text>
+          <view class="t-caption setting-desc">微信通过「订阅消息」提醒，由服务端在设定时间发送</view>
+        </view>
+        <glass-switch checked="{{reminderEnabled}}" bind:change="onToggleReminder" />
+      </view>
+
+      <picker mode="time" value="{{reminderTimeText}}" bindchange="onPickReminderTime">
+        <view class="setting-row">
+          <text class="list__label">提醒时间</text>
+          <view class="list__value">
+            <text class="setting-value">{{reminderTimeText}}</text>
+            <text class="chevron">›</text>
+          </view>
+        </view>
+      </picker>
+
+      <picker range="{{goalMinuteLabels}}" value="{{reminderGoalIndex}}" bindchange="onPickGoalMinutes">
+        <view class="setting-row">
+          <text class="list__label">每日目标</text>
+          <view class="list__value">
+            <text class="setting-value">{{reminderGoalText}}</text>
+            <text class="chevron">›</text>
+          </view>
+        </view>
+      </picker>
+
+      <picker range="{{freqLabels}}" value="{{freqIndex}}" bindchange="onPickFrequency">
+        <view class="setting-row">
+          <text class="list__label">提醒频率</text>
+          <view class="list__value">
+            <text class="setting-value">{{freqText}}</text>
+            <text class="chevron">›</text>
+          </view>
+        </view>
+      </picker>
+    </view>
+
+    <!-- ============ 内容管理 ============ -->
+    <view class="group__title">内容管理</view>
+    <view class="card">
+      <view class="setting-row" bindtap="onOpenTags">
+        <view class="flex-1">
+          <text class="list__label">标签管理</text>
+          <view class="t-caption setting-desc">新建/改色/排序标签，用于文章分类筛选</view>
+        </view>
+        <text class="chevron">›</text>
+      </view>
+      <view class="setting-row" bindtap="onExportCsv">
+        <view class="flex-1">
+          <text class="list__label">导出练习记录（CSV）</text>
+          <view class="t-caption setting-desc">服务端生成后转发到聊天</view>
+        </view>
+        <text class="chevron">›</text>
+      </view>
+      <view class="setting-row" bindtap="onExportBackup">
+        <view class="flex-1">
+          <text class="list__label">导出数据备份（JSON）</text>
+          <view class="t-caption setting-desc">含文章、记录与自定义配置</view>
+        </view>
+        <text class="chevron">›</text>
+      </view>
+      <view class="setting-row" bindtap="onClearLocal">
+        <text class="list__label setting-danger">清空本地数据</text>
+        <text class="chevron">›</text>
+      </view>
+    </view>
+
+    <!-- ============ 帮助 ============ -->
+    <view class="group__title">帮助</view>
+    <view class="card">
+      <view class="setting-row" bindtap="onOpenHelp">
+        <view class="flex-1">
+          <text class="list__label">使用帮助</text>
+          <view class="t-caption setting-desc">导入、练习模式、阅读遮挡与复习调度</view>
+        </view>
+        <text class="chevron">›</text>
+      </view>
+      <view class="setting-row">
+        <view class="flex-1">
+          <text class="list__label">匿名使用统计</text>
+          <view class="t-caption setting-desc">仅上报功能使用次数与数值区间，不含文章内容与个人信息</view>
+        </view>
+        <glass-switch checked="{{telemetryEnabled}}" bind:change="onToggleTelemetry" />
+      </view>
+    </view>
+
+    <!-- ============ 拓展功能 ============ -->
+    <view class="group__title">拓展功能</view>
+    <view class="card">
+      <view class="setting-row">
+        <text class="list__label">内置素材库（启用后显示「素材库」标签）</text>
+        <glass-switch checked="{{builtInLibraryEnabled}}" bind:change="onToggleLibrary" />
+      </view>
+    </view>
+
+    <!-- ============ 账户 ============ -->
+    <view class="group__title">账户</view>
+    <view class="card">
+      <view class="setting-row" bindtap="onTapAccount">
+        <view class="flex-1">
+          <text class="list__label">{{nickname}}</text>
+          <view class="t-caption setting-desc">{{loggedIn ? '查看资料、我的上传与字体' : '登录后可云同步、上传与使用 AI'}}</view>
+        </view>
+        <text class="chevron">›</text>
+      </view>
+      <view class="setting-row">
+        <text class="list__label">云空间用量</text>
+        <text class="list__value setting-value">{{spaceText}}</text>
+      </view>
+    </view>
+
+    <!-- ============ 关于 ============ -->
+    <view class="group__title">关于</view>
+    <view class="card">
+      <view class="setting-row">
+        <text class="list__label">版本号</text>
+        <text class="list__value setting-value">v{{version}}</text>
+      </view>
+      <view class="setting-row" bindtap="onOpenLicenses">
+        <text class="list__label">开源许可与第三方声明</text>
+        <text class="chevron">›</text>
+      </view>
+      <view class="setting-row" bindtap="onTapAgreement" data-type="terms">
+        <text class="list__label">用户协议</text>
+        <text class="chevron">›</text>
+      </view>
+      <view class="setting-row" bindtap="onTapAgreement" data-type="privacy">
+        <text class="list__label">隐私政策</text>
+        <text class="chevron">›</text>
+      </view>
+    </view>
+
+    <view wx:if="{{loggedIn}}" class="logout-wrap">
+      <view class="btn btn--block btn--danger" bindtap="onLogout">退出登录</view>
+    </view>
+  </view>
+</view>
